@@ -1,0 +1,143 @@
+@prefix cu: <http://is-concordia.io/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix teach: <http://linkedscience.org/teach/ns#> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dbr:       <http://dbpedia.org/resource/> .
+@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+
+#Classes
+cu:University
+    a               rdfs:Class ;
+    rdfs:subClassOf foaf:Organization ;
+    owl:sameAs      dbr:University ;
+    rdfs:label      "University"@en .
+
+cu:Course a rdfs:Class ;
+    rdfs:subClassOf teach:Course ;
+    rdfs:label      "Course"@en .
+
+cu:CourseComponent a rdfs:Class ;
+    rdfs:subClassOf dbo:Event ;
+    rdfs:label      "Course Component"@en .
+
+cu:Lecture
+    a               rdfs:Class ;
+    rdfs:subClassOf cu:CourseComponent ;
+    owl:sameAs      teach:Lecture;
+    rdfs:label      "Lecture"@en .
+
+cu:LectureMaterial a rdfs:Class ;
+    rdfs:subClassOf teach:Material ;
+    rdfs:label      "Course"@en .
+
+cu:Slide a rdfs:Class ;
+    rdfs:subClassOf cu:LectureMaterial ;
+    rdfs:label      "Slide"@en .
+
+cu:Worksheet
+    a rdfs:Class ;
+    rdfs:subClassOf cu:LectureMaterial ;
+    rdfs:label      "Worksheet"@en .
+
+cu:Reading
+    a               rdfs:Class ;
+    rdfs:subClassOf cu:LectureMaterial ;
+    rdfs:label      "Worksheet"@en .
+
+
+cu:Lab
+    a               rdfs:Class ;
+    rdfs:subClassOf cu:CourseComponent ;
+    rdfs:label      "Laboratory"@en .
+
+cu:Tutorial
+    a               rdfs:Class ;
+    rdfs:subClassOf cu:CourseComponent ;
+    rdfs:label      "Tutorial"@en .
+
+
+
+
+# Properties
+cu:Offers
+    a            rdf:Property ;
+    rdfs:label   "Offers"@en ;
+    rdfs:comment "Classes a university offers"@en ;
+    rdfs:domain  cu:University ;
+    rdfs:range   cu:Course .
+
+
+
+cu:hasName a rdf:Property ;
+    rdfs:label "hasName" ;
+    rdfs:comment "Specifies the name of an entity." .
+
+cu:hasDBpediaLink a rdf:Property ;
+    rdfs:label "hasDBpediaLink" ;
+    rdfs:comment "Specifies the DBpedia link of an entity." .
+
+cu:hasWikidataLink a rdf:Property ;
+    rdfs:label "hasWikidataLink" ;
+    rdfs:comment "Specifies the Wikidata link of an entity." .
+
+cu:hasSubject a rdf:Property ;
+    rdfs:label "hasSubject" ;
+    rdfs:comment "Specifies the subject of an entity." .
+
+cu:hasNumber a rdf:Property ;
+    rdfs:label "hasNumber" ;
+    rdfs:comment "Specifies the number associated with an entity." .
+
+cu:hasCredits a rdf:Property ;
+    rdfs:label "hasCredits" ;
+    rdfs:comment "Specifies the credits assigned to an entity." .
+
+cu:hasFaculty a rdf:Property ;
+    rdfs:label "hasFaculty" ;
+    rdfs:comment "Specifies the faculty associated with an entity." .
+
+cu:hasProgram a rdf:Property ;
+    rdfs:label "hasProgram" ;
+    rdfs:comment "Specifies the program associated with an entity." .
+
+cu:hasDepartment a rdf:Property ;
+    rdfs:label "hasDepartment" ;
+    rdfs:comment "Specifies the department associated with an entity." .
+
+cu:hasLevel a rdf:Property ;
+    rdfs:label "hasLevel" ;
+    rdfs:comment "Specifies the level (e.g., undergraduate or graduate) associated with an entity." .
+
+cu:hasDescription a rdf:Property ;
+    rdfs:label "hasDescription" ;
+    rdfs:comment "Specifies the description of an entity." .
+
+cu:hasLink a rdf:Property ; # rdfs:seeAlso
+    rdfs:label "hasLink" ;
+    rdfs:comment "Specifies the link of an entity." .
+
+cu:hasOutline a rdf:Property ;
+    rdfs:label "hasOutline" ;
+    rdfs:comment "Specifies the outline of an entity." .
+
+cu:hasContent a rdf:Property ;
+    rdfs:label "hasContent" ;
+    rdfs:comment "Specifies the content of an entity." .
+
+cu:hasSlides a rdf:Property ;
+    rdfs:label "hasSlides" ;
+    rdfs:comment "Specifies the slides associated with an entity." .
+
+cu:hasWorksheets a rdf:Property ;
+    rdfs:label "hasWorksheets" ;
+    rdfs:comment "Specifies the worksheets associated with an entity." .
+
+cu:hasReadings a rdf:Property ;
+    rdfs:label "hasReadings" ;
+    rdfs:comment "Specifies the readings associated with an entity." .
+
+cu:hasOtherMaterial a rdf:Property ;
+    rdfs:label "hasOtherMaterial" ;
+    rdfs:comment "Specifies other materials associated with an entity." .
