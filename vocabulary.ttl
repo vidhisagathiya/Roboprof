@@ -1,143 +1,178 @@
+Certainly! Let's expand the ontology in your Vocabulary.ttl file based on the description you provided. We'll add properties and classes for the remaining entities such as course components, topics, and student information:
+
+```turtle
 @prefix cu: <http://is-concordia.io/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix teach: <http://linkedscience.org/teach/ns#> .
-@prefix dbo: <http://dbpedia.org/ontology/> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix dbr:       <http://dbpedia.org/resource/> .
-@prefix owl:       <http://www.w3.org/2002/07/owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-#Classes
+# Classes
 cu:University
     a               rdfs:Class ;
-    rdfs:subClassOf foaf:Organization ;
-    owl:sameAs      dbr:University ;
-    rdfs:label      "University"@en .
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "University" .
 
-cu:Course a rdfs:Class ;
-    rdfs:subClassOf teach:Course ;
-    rdfs:label      "Course"@en .
-
-cu:CourseComponent a rdfs:Class ;
-    rdfs:subClassOf dbo:Event ;
-    rdfs:label      "Course Component"@en .
+cu:Course
+    a               rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Course" .
 
 cu:Lecture
     a               rdfs:Class ;
-    rdfs:subClassOf cu:CourseComponent ;
-    owl:sameAs      teach:Lecture;
-    rdfs:label      "Lecture"@en .
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Lecture" .
 
-cu:LectureMaterial a rdfs:Class ;
-    rdfs:subClassOf teach:Material ;
-    rdfs:label      "Course"@en .
-
-cu:Slide a rdfs:Class ;
-    rdfs:subClassOf cu:LectureMaterial ;
-    rdfs:label      "Slide"@en .
-
-cu:Worksheet
-    a rdfs:Class ;
-    rdfs:subClassOf cu:LectureMaterial ;
-    rdfs:label      "Worksheet"@en .
-
-cu:Reading
+cu:Topic
     a               rdfs:Class ;
-    rdfs:subClassOf cu:LectureMaterial ;
-    rdfs:label      "Worksheet"@en .
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Topic" .
 
-
-cu:Lab
+cu:Student
     a               rdfs:Class ;
-    rdfs:subClassOf cu:CourseComponent ;
-    rdfs:label      "Laboratory"@en .
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Student" .
 
-cu:Tutorial
+cu:CourseComponent
     a               rdfs:Class ;
-    rdfs:subClassOf cu:CourseComponent ;
-    rdfs:label      "Tutorial"@en .
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "CourseComponent" .
 
-
+cu:Grade
+    a               rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Grade" .
 
 
 # Properties
-cu:Offers
+cu:hasUniversity
     a            rdf:Property ;
-    rdfs:label   "Offers"@en ;
-    rdfs:comment "Classes a university offers"@en ;
-    rdfs:domain  cu:University ;
-    rdfs:range   cu:Course .
+    rdfs:label   "hasUniversity" ;
+    rdfs:comment "Specifies the university offering the course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   cu:University .
 
+cu:hasCourseName
+    a            rdf:Property ;
+    rdfs:label   "hasCourseName" ;
+    rdfs:comment "Specifies the name of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
+cu:hasCourseSubject
+    a            rdf:Property ;
+    rdfs:label   "hasCourseSubject" ;
+    rdfs:comment "Specifies the subject of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasName a rdf:Property ;
-    rdfs:label "hasName" ;
-    rdfs:comment "Specifies the name of an entity." .
+cu:hasCourseNumber
+    a            rdf:Property ;
+    rdfs:label   "hasCourseNumber" ;
+    rdfs:comment "Specifies the number of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasDBpediaLink a rdf:Property ;
-    rdfs:label "hasDBpediaLink" ;
-    rdfs:comment "Specifies the DBpedia link of an entity." .
+cu:hasCourseCredits
+    a            rdf:Property ;
+    rdfs:label   "hasCourseCredits" ;
+    rdfs:comment "Specifies the credits assigned to a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasWikidataLink a rdf:Property ;
-    rdfs:label "hasWikidataLink" ;
-    rdfs:comment "Specifies the Wikidata link of an entity." .
+cu:hasCourseDescription
+    a            rdf:Property ;
+    rdfs:label   "hasCourseDescription" ;
+    rdfs:comment "Specifies the description of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasSubject a rdf:Property ;
-    rdfs:label "hasSubject" ;
-    rdfs:comment "Specifies the subject of an entity." .
+cu:hasCourseLink
+    a            rdf:Property ;
+    rdfs:label   "hasCourseLink" ;
+    rdfs:comment "Specifies the link to a webpage with course information" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasNumber a rdf:Property ;
-    rdfs:label "hasNumber" ;
-    rdfs:comment "Specifies the number associated with an entity." .
+cu:hasCourseOutline
+    a            rdf:Property ;
+    rdfs:label   "hasCourseOutline" ;
+    rdfs:comment "Specifies the outline of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasCredits a rdf:Property ;
-    rdfs:label "hasCredits" ;
-    rdfs:comment "Specifies the credits assigned to an entity." .
+cu:hasLectureNumber
+    a            rdf:Property ;
+    rdfs:label   "hasLectureNumber" ;
+    rdfs:comment "Specifies the number of a lecture" ;
+    rdfs:domain  cu:Lecture ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasFaculty a rdf:Property ;
-    rdfs:label "hasFaculty" ;
-    rdfs:comment "Specifies the faculty associated with an entity." .
+cu:hasLectureName
+    a            rdf:Property ;
+    rdfs:label   "hasLectureName" ;
+    rdfs:comment "Specifies the name of a lecture" ;
+    rdfs:domain  cu:Lecture ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasProgram a rdf:Property ;
-    rdfs:label "hasProgram" ;
-    rdfs:comment "Specifies the program associated with an entity." .
+cu:hasLectureContent
+    a            rdf:Property ;
+    rdfs:label   "hasLectureContent" ;
+    rdfs:comment "Specifies the content of a lecture" ;
+    rdfs:domain  cu:Lecture ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasDepartment a rdf:Property ;
-    rdfs:label "hasDepartment" ;
-    rdfs:comment "Specifies the department associated with an entity." .
+cu:hasLectureLink
+    a            rdf:Property ;
+    rdfs:label   "hasLectureLink" ;
+    rdfs:comment "Specifies the link to a webpage with lecture information" ;
+    rdfs:domain  cu:Lecture ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasLevel a rdf:Property ;
-    rdfs:label "hasLevel" ;
-    rdfs:comment "Specifies the level (e.g., undergraduate or graduate) associated with an entity." .
+cu:hasTopicName
+    a            rdf:Property ;
+    rdfs:label   "hasTopicName" ;
+    rdfs:comment "Specifies the name of a topic" ;
+    rdfs:domain  cu:Topic ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasDescription a rdf:Property ;
-    rdfs:label "hasDescription" ;
-    rdfs:comment "Specifies the description of an entity." .
+cu:hasProvenance
+    a            rdf:Property ;
+    rdfs:label   "hasProvenance" ;
+    rdfs:comment "Specifies where the topic was identified as being covered in the course" ;
+    rdfs:domain  cu:Topic ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasLink a rdf:Property ; # rdfs:seeAlso
-    rdfs:label "hasLink" ;
-    rdfs:comment "Specifies the link of an entity." .
+cu:hasTopicLink
+    a            rdf:Property ;
+    rdfs:label   "hasTopicLink" ;
+    rdfs:comment "Specifies the link to DBpedia and/or Wikidata for a topic" ;
+    rdfs:domain  cu:Topic ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasOutline a rdf:Property ;
-    rdfs:label "hasOutline" ;
-    rdfs:comment "Specifies the outline of an entity." .
+cu:hasStudentName
+    a            rdf:Property ;
+    rdfs:label   "hasStudentName" ;
+    rdfs:comment "Specifies the name of a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasContent a rdf:Property ;
-    rdfs:label "hasContent" ;
-    rdfs:comment "Specifies the content of an entity." .
+cu:hasStudentID
+    a            rdf:Property ;
+    rdfs:label   "hasStudentID" ;
+    rdfs:comment "Specifies the ID number of a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasSlides a rdf:Property ;
-    rdfs:label "hasSlides" ;
-    rdfs:comment "Specifies the slides associated with an entity." .
+cu:hasStudentEmail
+    a            rdf:Property ;
+    rdfs:label   "hasStudentEmail" ;
+    rdfs:comment "Specifies the email address of a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   rdfs:Literal .
 
-cu:hasWorksheets a rdf:Property ;
-    rdfs:label "hasWorksheets" ;
-    rdfs:comment "Specifies the worksheets associated with an entity." .
-
-cu:hasReadings a rdf:Property ;
-    rdfs:label "hasReadings" ;
-    rdfs:comment "Specifies the readings associated with an entity." .
-
-cu:hasOtherMaterial a rdf:Property ;
-    rdfs:label "hasOtherMaterial" ;
-    rdfs:comment "Specifies other materials associated with an entity." .
+cu:hasCompletedCourse
+    a            rdf:Property ;
+    rdfs:label   "hasCompletedCourse" ;
+    rdfs:comment "Specifies the courses completed by a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   cu:
