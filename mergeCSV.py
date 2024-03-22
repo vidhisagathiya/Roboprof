@@ -2,12 +2,15 @@ import pandas as pd
 import numpy as np
 
 # Read the files into two dataframes.
+# cleaned this file for one data which was on the same cell "JMSB_1"
 df1 = pd.read_csv('CATALOG_2023_09_19.csv')
+#converted this file from utf-16 to utf-8
 df2 = pd.read_csv('CU_SR_OPEN_DATA_CATALOG_UTF8.csv')
 
 classUnits = df2['Class Units']
 
 # Add the extracted column into CSV2 DataFrame
+# #df1 did not have any course credit column. Used df2 to extract that column
 df1['Class Units'] = classUnits
 print(df1.columns)
 
