@@ -22,7 +22,6 @@ for col in df1.columns:
 df1 = df1.dropna(subset=['Course code', 'Course number'])
 
 df1.loc[1249,'Course code'] = "COMP"
-print(df1.loc[1249])
 
 # Write the modified CSV2 DataFrame back to a new CSV file
 df1.to_csv('CLEANED_DATA.csv', index=False)
