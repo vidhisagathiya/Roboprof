@@ -87,6 +87,13 @@ cu:hasCredits
     rdfs:domain  cu:Course ;
     rdfs:range   rdfs:Literal .    
 
+cu:hasLecture
+    a            rdf:Property ;
+    rdfs:label   "hasLecture" ;
+    rdfs:comment "Specifies the Lecture"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
+
 cu:hasLectureNumber
     a            rdf:Property ;
     rdfs:label   "hasLectureNumber" ;

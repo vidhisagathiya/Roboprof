@@ -219,7 +219,7 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
         lec_id = CU["{}{}_Lecture#{}".format(
             row['Course code'], row['Course number'], i)]
         # add lecture for course
-        roboProfKG.add((cn, CU.HasLecture, lec_id))
+        roboProfKG.add((cn, CU.hasLecture, lec_id))
         roboProfKG.add((lec_id, RDF.type, CU.Lecture))
         # add lecture number
         roboProfKG.add((lec_id, CU.hasLectureNumber, Literal(i)))
