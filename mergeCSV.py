@@ -12,7 +12,6 @@ classUnits = df2['Class Units']
 # Add the extracted column into CSV2 DataFrame
 # #df1 did not have any course credit column. Used df2 to extract that column
 df1['Class Units'] = classUnits
-print(df1.columns)
 
 for col in df1.columns:
     if df1[col].dtype == 'object':
@@ -21,6 +20,9 @@ for col in df1.columns:
 
 # remove empty course codes and course names
 df1 = df1.dropna(subset=['Course code', 'Course number'])
+
+df1.loc[1249,'Course code'] = "COMP"
+print(df1.loc[1249])
 
 # Write the modified CSV2 DataFrame back to a new CSV file
 df1.to_csv('CLEANED_DATA.csv', index=False)
