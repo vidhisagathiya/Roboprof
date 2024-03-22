@@ -1,6 +1,3 @@
-Certainly! Let's expand the ontology in your Vocabulary.ttl file based on the description you provided. We'll add properties and classes for the remaining entities such as course components, topics, and student information:
-
-```turtle
 @prefix cu: <http://is-concordia.io/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -21,6 +18,16 @@ cu:Lecture
     a               rdfs:Class ;
     rdfs:subClassOf owl:Thing ;
     rdfs:label      "Lecture" .
+
+cu:Worksheet
+    a               rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Worksheet" .
+
+cu:Slide
+    a               rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    rdfs:label      "Slide" .
 
 cu:Topic
     a               rdfs:Class ;
@@ -99,6 +106,13 @@ cu:hasCourseOutline
     rdfs:comment "Specifies the outline of a course" ;
     rdfs:domain  cu:Course ;
     rdfs:range   rdfs:Literal .
+
+cu:hasCredits
+    a            rdf:Property ;
+    rdfs:label   "hasCredits" ;
+    rdfs:comment "Specifies the number of credits of a course" ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .    
 
 cu:hasLectureNumber
     a            rdf:Property ;
