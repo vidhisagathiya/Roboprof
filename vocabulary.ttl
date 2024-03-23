@@ -108,6 +108,12 @@ cu:hasLectureContent
     rdfs:domain  cu:Lecture ;
     rdfs:range   rdfs:LectureContent .
 
+cu:topicsCovered
+    a            rdf:Property ;
+    rdfs:label   "Topics covered in a Lecture" ;
+    rdfs:comment "Specifies the Topics covered in a lecture"@en ;
+    rdfs:domain  cu:Lecture ;
+    rdfs:range   rdfs:Topic .
 
 cu:hasTopic
     a            rdf:Property ;
@@ -122,6 +128,13 @@ cu:hasProvenance
     rdfs:comment "Specifies where the topic was identified as being covered in the course" ;
     rdfs:domain  cu:Topic ;
     rdfs:range   rdfs:Literal .
+
+cu:hasMaterials
+    a            rdf:Property ;
+    rdfs:label   "hasMaterials" ;
+    rdfs:comment "Specifies materials for the topic" ;
+    rdfs:domain  cu:Topic ;
+    rdfs:range   rdfs:LectureContent .
 
 cu:hasStudentID
     a            rdf:Property ;
