@@ -73,7 +73,6 @@ TOPIC_TITLES_6231 = [
     'Content_addressable_network',
     'Distributed_resource_scheduler',
     'Service_oriented_architecture',
-    'Machine_learning'  # common
 ]
 
 
@@ -215,23 +214,23 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
         roboProfKG.add((cn, CU.hasCourseOutline,
                        CU["{}/data/COMP6741/course_outline.pdf".format(BASE_DATA_DIR)]))
     # Add Lectures
+    topic_index = 0
+    num_topics_per_lecture = len(TOPIC_TITLES_6231) // lecture_number
     for i in range(1, lecture_number):
-        lec_id = CU["{}{}_Lecture#{}".format(
-            row['Course code'], row['Course number'], i)]
+        lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], i)]
         # add lecture for course
         roboProfKG.add((cn, CU.hasLecture, lec_id))
         roboProfKG.add((lec_id, RDF.type, CU.Lecture))
         # add lecture number
         roboProfKG.add((lec_id, CU.hasLectureNumber, Literal(i)))
-        # roboProfKG.add((cn, CU.HasCourseEvent, lec_id))
         # Add topics, Lecture Name, description
         if row['Course number'] == '6231':
             # add Lecture Name/Title
-            roboProfKG.add(
-                (lec_id, FOAF.name, Literal(LEC_TITLES_6231[i - 1])))
+            roboProfKG.add((lec_id, FOAF.name, Literal(LEC_TITLES_6231[i - 1])))
             # add course description
-            roboProfKG.add((cn, TEACH.courseDescription,
-                           Literal(COMP6231_DESC)))
+            roboProfKG.add((cn, TEACH.courseDescription,Literal(COMP6231_DESC)))
+            for topic in TOPIC_TITLES_6231[topic_index:topic_index+num_topics_per_lecture]:
+                roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
         else:
             # add Lecture Name/Title
             roboProfKG.add(
@@ -239,7 +238,14 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
             # add course description
             roboProfKG.add((cn, TEACH.courseDescription,
                            Literal(COMP6741_DESC)))
+            for topic in TOPIC_TITLES_6741[topic_index:topic_index+num_topics_per_lecture]:
+                roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
+        topic_index += num_topics_per_lecture
 
+    if row['Course number'] == '6231':
+        if topic_index < len(TOPIC_TITLES_6231):
+                for topic in TOPIC_TITLES_6231[topic_index:]:
+                    roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
     # Add worksheets
     for worksheet in range(1, worksheets):
         if row['Course number'] == '6231':
@@ -249,7 +255,6 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
             lec_id = CU["{}{}_Lecture#{}".format(
                 row['Course code'], row['Course number'], worksheet)]
             roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))
-            # roboProfKG.add((cn, CU.HasCourseEvent, lab_id))
         else:
             worksheet_id = CU[BASE_DATA_DIR+"/{}{}/Worksheet/worksheet{}.pdf".format(
                 row['Course code'], row['Course number'], worksheet)]
@@ -283,12 +288,14 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
             roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
             roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
             roboProfKG.add((cn, CU.hasTopic, CU[topic]))
+            roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.mongodb.com/docs/manual/sharding/")))
     else:
         for topic in TOPIC_TITLES_6741:
             roboProfKG.add((CU[topic], RDF.type, CU.Topic))
             roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
             roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
             roboProfKG.add((cn, CU.hasTopic, CU[topic]))
+            roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.ibm.com/topics/machine-learning")))
 
     return roboProfKG
 
