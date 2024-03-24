@@ -1,0 +1,13 @@
+
+
+1. List all courses offered by [university]
+
+
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
+
+SELECT ?course ?title
+WHERE {
+    cu:Concordia_University cu:Offers ?course .
+  	?course tc:courseTitle ?title .
+}

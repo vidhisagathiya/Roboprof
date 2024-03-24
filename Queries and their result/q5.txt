@@ -1,0 +1,16 @@
+
+
+5. What [materials] (slides, readings) are recommended for [topic] in [course] [number]? 
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+SELECT ?topicName ?topics ?materials
+WHERE {
+?course cu:hasTopic ?topics ;
+cu:hasCourseSubject ?courseSubject; cu:hasCourseNumber ?courseNumber .
+?topics foaf:name ?topicName ;
+cu:hasMaterials ?materials .
+FILTER(?courseSubject = "COMP")
+filter(?courseNumber = "6231")
+filter(?topicName= "Sharding")
+}

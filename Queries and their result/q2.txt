@@ -1,0 +1,17 @@
+
+
+2. In which courses is [topic] discussed?
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?name ?course ?link
+WHERE {
+  ?course a cu:Course .
+  ?course cu:hasTopic ?topic .
+	?topic foaf:name ?name .
+  	?topic rdfs:seeAlso ?link
+  FILTER(?name = "Machine_learning")
+}

@@ -1,0 +1,19 @@
+
+
+12. Which [students] have completed [course] [number]?
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?studentName ?course ?gradeValue
+        WHERE {
+          ?student cu:isEnrolledIn ?course;
+                 foaf:name ?studentName  .
+          ?course cu:hasCourseSubject ?subject ;
+  					cu:hasCourseNumber ?number .
+  ?student ?course ?gradeValue
+  FILTER(?subject = "COMP")
+  FILTER(?number = "6741")
+        }

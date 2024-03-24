@@ -1,0 +1,18 @@
+
+
+8. Detail the content (slides, worksheets, readings) available for [lecture number] in [course] [number]. 
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+
+SELECT ?course ?lecture ?content
+WHERE {
+  	?course rdf:type cu:Course .
+  	?course cu:hasLecture ?lecture .
+  	?lecture cu:hasLectureContent ?content ;
+            cu:hasLectureNumber ?number
+  FILTER(?course = cu:COMP6231)
+  FILTER(?number = 3)
+}

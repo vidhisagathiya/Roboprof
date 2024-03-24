@@ -1,0 +1,19 @@
+
+
+13. Print a transcript for a [student], listing all the course taken with their grades. 
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX teach: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+
+SELECT ?name ?id ?email ?courseTitle ?grade
+        WHERE {
+          ?student cu:isEnrolledIn ?course .
+  ?course teach:courseTitle ?courseTitle .
+  		?student foaf:name ?name .
+  		?student cu:hasStudentID ?id .
+    	?student cu:hasStudentEmail ?email .
+  		?student ?course ?grade
+  FILTER(?name = "Nilesh")
+        }
