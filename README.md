@@ -1,4 +1,8 @@
 # Roboprof
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/vidhisagathiya/Roboprof/blob/main/RoboProf.png" alt="Roboprof" style="width: 45%;">
+    <img src="https://github.com/vidhisagathiya/Roboprof/blob/main/Project_Structure.png" alt="Project Structure" style="width: 45%;">
+</div>
 
 ## Introduction
 
