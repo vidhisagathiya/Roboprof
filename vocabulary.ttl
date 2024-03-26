@@ -51,6 +51,13 @@ cu:Student
 
 
 # Properties
+cu:Offers
+    a            rdf:Property ;
+    rdfs:label   "Offers" ;
+    rdfs:comment "Specifies the course offered by the University"@en ;
+    rdfs:domain  cu:University ;
+    rdfs:range   rdfs:Literal .
+
 cu:hasCourseSubject
     a            rdf:Property ;
     rdfs:label   "hasCourseSubject" ;
@@ -155,3 +162,10 @@ cu:isEnrolledIn
     rdfs:comment "Specifies the courses of a student" ;
     rdfs:domain  cu:Student ;
     rdfs:range   rdfs:Course .
+
+cu:hasCompetency
+    a            rdf:Property ;
+    rdfs:label   "hasCompetency" ;
+    rdfs:comment "Specifies the competencies of a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   rdfs:Topic .
