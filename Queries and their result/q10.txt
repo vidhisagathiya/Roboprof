@@ -1,0 +1,20 @@
+
+
+10. What competencies [topics] does a student gain after completing [course] [number]? 
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?topicName ?topicLink
+WHERE {
+  ?course a cu:Course .
+  ?course cu:hasTopic ?topic .
+  ?topic foaf:name ?topicName;
+         rdfs:seeAlso ?topicLink .
+  ?course cu:hasCourseSubject ?subject .
+  ?course cu:hasCourseNumber ?number .
+  FILTER(?subject = "COMP")
+  FILTER(?number = "6231")
+}

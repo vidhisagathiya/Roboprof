@@ -1,0 +1,15 @@
+
+
+6. How many credits is [course] [number] worth?
+
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+
+SELECT ?course ?credits
+WHERE {
+    ?course cu:hasCredits ?credits ;
+            cu:hasCourseSubject ?subject;
+            cu:hasCourseNumber ?number .
+  FILTER(?subject = "HIST")
+  FILTER(?number = "397")
+}

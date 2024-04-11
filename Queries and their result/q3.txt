@@ -1,0 +1,22 @@
+
+
+3. Which [topics] are covered in [course] during [lecture number]?
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
+
+SELECT ?topicName ?topics
+WHERE {
+  	cu:Concordia_University cu:Offers ?course .
+  	?course tc:courseTitle ?title ;
+  		cu:hasLecture ?lecture ;
+    cu:hasCourseSubject ?courseSubject.
+  ?lecture cu:topicsCovered ?topics ;
+           cu:hasLectureNumber ?lectureNumber .
+  ?topics foaf:name ?topicName.
+  FILTER(?courseSubject = "COMP")
+  FILTER(?lectureNumber = 4)
+}

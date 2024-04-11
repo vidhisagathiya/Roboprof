@@ -1,0 +1,15 @@
+
+
+9. What reading materials are recommended for studying [topic] in [course]?  
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+SELECT ?topicName ?topics ?materials
+WHERE {
+?course cu:hasTopic ?topics ;
+cu:hasCourseSubject ?courseSubject; cu:hasCourseNumber ?courseNumber .
+?topics foaf:name ?topicName ;
+cu:hasMaterials ?materials .
+FILTER(?courseSubject = "COMP")
+filter(?topicName= "Machine_learning")
+}

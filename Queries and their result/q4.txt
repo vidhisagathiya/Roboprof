@@ -1,0 +1,14 @@
+
+
+4. List all [courses] offered by [university] within the [subject] (e.g., “COMP”, “SOEN”).
+
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
+
+SELECT ?course ?title ?subject
+WHERE {
+    cu:Concordia_University cu:Offers ?course .
+  	?course tc:courseTitle ?title .
+  	?course cu:hasCourseSubject ?subject.
+  FILTER(?subject = "COMP")
+}

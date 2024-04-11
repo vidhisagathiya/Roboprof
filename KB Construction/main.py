@@ -6,7 +6,8 @@ from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS, FOAF
 
 # Define BASE_DATA_DIR
-BASE_DATA_DIR = os.getcwd() + "/data"
+BASE_DATA_DIR = os.getcwd()
+current_directory = os.path.dirname(BASE_DATA_DIR)
 
 CU = Namespace("http://is-concordia.io/")
 DBR = Namespace("http://dbpedia.org/resource/")
@@ -162,8 +163,11 @@ def generateKnowledgeBase(roboProfKG):
                    Literal("Concordia University")))
     roboProfKG.add((CU.Concordia_University, RDFS.seeAlso,
                    DBR.Concordia_University))
+    
+    # Construct the path to the CSV file in the Dataset folder
+    dataset_path = os.path.join(current_directory, "Dataset", "CLEANED_DATA.csv")
 
-    with open('CLEANED_DATA.csv', 'r') as data:
+    with open(dataset_path, 'r') as data:
         r = csv.DictReader(data)
         for row in r:
             # Create the course
@@ -189,8 +193,11 @@ def generateKnowledgeBase(roboProfKG):
             if row['Website'] != "":
                 roboProfKG.add((cn, RDFS.seeAlso, Literal(row['Website'])))
     roboProfKG = addStudentsToKnowledgeBase(roboProfKG)
-    roboProfKG.serialize(destination="kb.ttl", format="turtle")
-    roboProfKG.serialize(destination="kb_ntriples.rdf", format="ntriples")
+
+    save_path_ttl = os.path.join(current_directory, "Knowledge Base", "kb.ttl")
+    save_path_rdf = os.path.join(current_directory, "Knowledge Base", "kb_ntriples.rdf")
+    roboProfKG.serialize(destination=save_path_ttl, format="turtle")
+    roboProfKG.serialize(destination=save_path_rdf, format="ntriples")
 
 
 def addCoreCoursesKnowledge(roboProfKG, row, cn):
@@ -206,13 +213,13 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
     if row['Course number'] == '6231':
         lecture_number = 11
         worksheets = 11
-        roboProfKG.add((cn, CU.hasCourseOutline,
-                       CU["{}/data/COMP6231/course_outline.pdf".format(BASE_DATA_DIR)]))
+        outline_path = os.path.join(current_directory, "Dataset", "COMP6231", "course_outline.pdf")
     else:
         lecture_number = 9
         worksheets = 8
-        roboProfKG.add((cn, CU.hasCourseOutline,
-                       CU["{}/data/COMP6741/course_outline.pdf".format(BASE_DATA_DIR)]))
+        outline_path = os.path.join(current_directory, "Dataset", "COMP6741", "course_outline.pdf")
+
+    roboProfKG.add((cn, CU.hasCourseOutline, URIRef(outline_path)))
     # Add Lectures
     topic_index = 0
     num_topics_per_lecture = len(TOPIC_TITLES_6231) // lecture_number
@@ -249,36 +256,32 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
     # Add worksheets
     for worksheet in range(1, worksheets):
         if row['Course number'] == '6231':
-            worksheet_id = CU[BASE_DATA_DIR+"/{}{}/Worksheet/worksheet{}.pdf".format(
-                row['Course code'], row['Course number'], worksheet)]
+            worksheet_path = os.path.join(current_directory, "Dataset", "Comp6231", "Worksheet", "worksheet{}.pdf".format(worksheet))
+            worksheet_id = URIRef(worksheet_path)
             roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
-            lec_id = CU["{}{}_Lecture#{}".format(
-                row['Course code'], row['Course number'], worksheet)]
+            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], worksheet)]
             roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))
         else:
-            worksheet_id = CU[BASE_DATA_DIR+"/{}{}/Worksheet/worksheet{}.pdf".format(
-                row['Course code'], row['Course number'], worksheet)]
+            worksheet_path = os.path.join(current_directory, "Dataset", "Comp6231", "Worksheet", "worksheet{}.pdf".format(worksheet))
+            worksheet_id = URIRef(worksheet_path)
             roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
-            lec_id = CU["{}{}_Lecture#{}".format(
-                row['Course code'], row['Course number'], worksheet+1)]
+            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], worksheet)]
             roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))
 
-    # add slides
+        # add slides
     for slide in range(1, lecture_number):
         if row['Course number'] == '6231':
-            slide_id = CU[BASE_DATA_DIR+"/{}{}/Slide/slide{}.pdf".format(
-                row['Course code'], row['Course number'], slide)]
+            slide_path = os.path.join(current_directory, "Dataset", "Comp6231", "Slide", "slide{}.pdf".format(slide))
+            slide_id = URIRef(slide_path)
             roboProfKG.add((slide_id, RDF.type, CU.Slide))
-            lec_id = CU["{}{}_Lecture#{}".format(
-                row['Course code'], row['Course number'], slide)]
+            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], slide)]
             roboProfKG.add((lec_id, CU.hasLectureContent, slide_id))
 
         else:
-            slide_id = CU[BASE_DATA_DIR+"/{}{}/Slide/slide{}.pdf".format(
-                row['Course code'], row['Course number'], slide)]
-            roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
-            lec_id = CU["{}{}_Lecture#{}".format(
-                row['Course code'], row['Course number'], slide)]
+            slide_path = os.path.join(current_directory, "Dataset", "COMP6741",  "Slide", "slide{}.pdf".format(slide))
+            slide_id = URIRef(slide_path)
+            roboProfKG.add((slide_id, RDF.type, CU.Slide))
+            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], slide)]
             roboProfKG.add((lec_id, CU.hasLectureContent, slide_id))
 
     # add topics to courses

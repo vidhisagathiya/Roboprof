@@ -1569,59 +1569,47 @@ ns1:Vidhi a ns1:Student ;
     ns1:isEnrolledIn ns1:COMP6741 ;
     foaf:name "Vidhi" .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide1.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide1.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide10.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide2.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide2.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide3.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide3.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide4.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide4.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide5.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide5.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide6.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide6.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide7.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide7.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide8.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide8.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide1.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide9.pdf> a ns1:Slide .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide10.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet1.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide2.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet10.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide3.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet2.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide4.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet3.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide5.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet4.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide6.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet5.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide7.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet6.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide8.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet7.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide9.pdf> a ns1:Slide .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet8.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet10.pdf> a ns1:Worksheet .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet9.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet8.pdf> a ns1:Worksheet .
 
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet1.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet2.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet3.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet4.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet5.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet6.pdf> a ns1:Worksheet .
-
-<http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet7.pdf> a ns1:Worksheet .
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet9.pdf> a ns1:Worksheet .
 
 ns1:ACCO330 a ns1:Course ;
     ns1:hasCourseNumber "330" ;
@@ -4649,8 +4637,8 @@ ns1:COMP5541 a ns1:Course ;
     ns2:courseTitle "Tools and Techniques for Software Engineering" .
 
 <http://is-concordia.io/COMP6231_Lecture#1> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide1.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet1.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide1.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet1.pdf> ;
     ns1:hasLectureNumber 1 ;
     ns1:topicsCovered ns1:Construction_and_Analysis_of_Distributed_Processes,
         ns1:Message-oriented_middleware,
@@ -4660,8 +4648,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Construction_and_Analysis_of_Distributed_Processes" .
 
 <http://is-concordia.io/COMP6231_Lecture#10> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide10.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet10.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide10.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet10.pdf> ;
     ns1:hasLectureNumber 10 ;
     ns1:topicsCovered ns1:Consistent_hashing,
         ns1:Content_addressable_network,
@@ -4680,8 +4668,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Consistency_(database_systems)" .
 
 <http://is-concordia.io/COMP6231_Lecture#2> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide2.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet2.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide2.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet2.pdf> ;
     ns1:hasLectureNumber 2 ;
     ns1:topicsCovered <http://is-concordia.io/Category:Distributed_computing_architecture>,
         ns1:Consistency_\(database_systems\),
@@ -4691,8 +4679,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Virtual_machine" .
 
 <http://is-concordia.io/COMP6231_Lecture#3> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide3.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet3.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide3.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet3.pdf> ;
     ns1:hasLectureNumber 3 ;
     ns1:topicsCovered ns1:Decentralization,
         ns1:Distributed_algorithm,
@@ -4702,8 +4690,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Programming_paradigm" .
 
 <http://is-concordia.io/COMP6231_Lecture#4> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide4.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet4.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide4.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet4.pdf> ;
     ns1:hasLectureNumber 4 ;
     ns1:topicsCovered ns1:Cloud_computing,
         ns1:Grid_computing,
@@ -4713,8 +4701,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Transition_(computer_science)" .
 
 <http://is-concordia.io/COMP6231_Lecture#5> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide5.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet5.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide5.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet5.pdf> ;
     ns1:hasLectureNumber 5 ;
     ns1:topicsCovered ns1:Cluster_computing,
         ns1:Concurrency_control,
@@ -4724,8 +4712,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Message-oriented_middleware" .
 
 <http://is-concordia.io/COMP6231_Lecture#6> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide6.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet6.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide6.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet6.pdf> ;
     ns1:hasLectureNumber 6 ;
     ns1:topicsCovered ns1:Distributed_file_system,
         ns1:Distributed_lock_manager,
@@ -4735,8 +4723,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Thread_(computing)" .
 
 <http://is-concordia.io/COMP6231_Lecture#7> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide7.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet7.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide7.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet7.pdf> ;
     ns1:hasLectureNumber 7 ;
     ns1:topicsCovered ns1:Fault-tolerant_design,
         ns1:Inter-process_communication,
@@ -4746,8 +4734,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Category:Distributed_computing_architecture" .
 
 <http://is-concordia.io/COMP6231_Lecture#8> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide8.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet8.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide8.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet8.pdf> ;
     ns1:hasLectureNumber 8 ;
     ns1:topicsCovered ns1:Clock_synchronization,
         ns1:Consensus_algorithm,
@@ -4757,8 +4745,8 @@ ns1:COMP5541 a ns1:Course ;
     foaf:name "Distributed_database" .
 
 <http://is-concordia.io/COMP6231_Lecture#9> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Slide/slide9.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6231/Worksheet/worksheet9.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Slide/slide9.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet9.pdf> ;
     ns1:hasLectureNumber 9 ;
     ns1:topicsCovered ns1:Database_shard,
         ns1:Recovery-oriented_computing,
@@ -4831,7 +4819,8 @@ ns1:COMP6731 a ns1:Course ;
     ns2:courseTitle "Pattern Recognition" .
 
 <http://is-concordia.io/COMP6741_Lecture#1> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide1.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide1.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet1.pdf> ;
     ns1:hasLectureNumber 1 ;
     ns1:topicsCovered ns1:Artificial_intelligence,
         ns1:Expert_system,
@@ -4842,8 +4831,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Intelligent_system" .
 
 <http://is-concordia.io/COMP6741_Lecture#2> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide2.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet1.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide2.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet2.pdf> ;
     ns1:hasLectureNumber 2 ;
     ns1:topicsCovered ns1:Cognitive_computing,
         ns1:Deep_learning,
@@ -4854,8 +4843,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Knowledge_graph" .
 
 <http://is-concordia.io/COMP6741_Lecture#3> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide3.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet2.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide3.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet3.pdf> ;
     ns1:hasLectureNumber 3 ;
     ns1:topicsCovered ns1:Automated_decision_support,
         ns1:Data_mining,
@@ -4866,8 +4855,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Ontology_(information_science)" .
 
 <http://is-concordia.io/COMP6741_Lecture#4> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide4.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet3.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide4.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet4.pdf> ;
     ns1:hasLectureNumber 4 ;
     ns1:topicsCovered ns1:Evolutionary_computation,
         ns1:Expert_system_shell,
@@ -4878,8 +4867,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "SPARQL" .
 
 <http://is-concordia.io/COMP6741_Lecture#5> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide5.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet4.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide5.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet5.pdf> ;
     ns1:hasLectureNumber 5 ;
     ns1:topicsCovered ns1:Automated_planning,
         ns1:Bayesian_network,
@@ -4890,8 +4879,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Knowledge_base" .
 
 <http://is-concordia.io/COMP6741_Lecture#6> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide6.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet5.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide6.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet6.pdf> ;
     ns1:hasLectureNumber 6 ;
     ns1:topicsCovered ns1:Automated_reasoning,
         ns1:Cognitive_architecture,
@@ -4902,8 +4891,8 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Recommender_system" .
 
 <http://is-concordia.io/COMP6741_Lecture#7> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide7.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet6.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide7.pdf>,
+        </Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet7.pdf> ;
     ns1:hasLectureNumber 7 ;
     ns1:topicsCovered ns1:Autonomous_robot,
         ns1:Cognitive_system,
@@ -4914,8 +4903,7 @@ ns1:COMP6731 a ns1:Course ;
     foaf:name "Machine_learning" .
 
 <http://is-concordia.io/COMP6741_Lecture#8> a ns1:Lecture ;
-    ns1:hasLectureContent <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Slide/slide8.pdf>,
-        <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/COMP6741/Worksheet/worksheet7.pdf> ;
+    ns1:hasLectureContent </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/Slide/slide8.pdf> ;
     ns1:hasLectureNumber 8 ;
     ns1:topicsCovered ns1:Automated_planning_and_scheduling,
         ns1:Expert_system_development_tool,
@@ -12735,6 +12723,20 @@ ns1:WSDB498 a ns1:Course ;
     ns2:courseDescription "Practical, hands-on exercises" ;
     ns2:courseTitle "Seminar in Women’s Studies" .
 
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet1.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet2.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet3.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet4.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet5.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet6.pdf> a ns1:Worksheet .
+
+</Users/vidhisagathiya/Documents/Roboprof/Dataset/Comp6231/Worksheet/worksheet7.pdf> a ns1:Worksheet .
+
 ns1:Artificial_intelligence a ns1:Topic ;
     ns1:hasMaterials "https://www.ibm.com/topics/machine-learning" ;
     rdfs:seeAlso <http://dbpedia.org/resource/Artificial_intelligence> ;
@@ -12772,7 +12774,7 @@ ns1:Bayesian_network a ns1:Topic ;
 
 ns1:COMP6231 a ns1:Course ;
     ns1:hasCourseNumber "6231" ;
-    ns1:hasCourseOutline <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/data/COMP6231/course_outline.pdf> ;
+    ns1:hasCourseOutline </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6231/course_outline.pdf> ;
     ns1:hasCourseSubject "COMP" ;
     ns1:hasCredits "40.0" ;
     ns1:hasLecture <http://is-concordia.io/COMP6231_Lecture#1>,
@@ -13349,7 +13351,7 @@ ns1:Wireless_sensor_network a ns1:Topic ;
 
 ns1:COMP6741 a ns1:Course ;
     ns1:hasCourseNumber "6741" ;
-    ns1:hasCourseOutline <http://is-concordia.io//Users/nilesh/Work/COMP-474-IS/Roboprof/data/data/COMP6741/course_outline.pdf> ;
+    ns1:hasCourseOutline </Users/vidhisagathiya/Documents/Roboprof/Dataset/COMP6741/course_outline.pdf> ;
     ns1:hasCourseSubject "COMP" ;
     ns1:hasCredits "30.0" ;
     ns1:hasLecture <http://is-concordia.io/COMP6741_Lecture#1>,
