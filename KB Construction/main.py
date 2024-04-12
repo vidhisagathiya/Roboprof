@@ -227,6 +227,7 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
         lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], i)]
         # add lecture for course
         roboProfKG.add((cn, CU.hasLecture, lec_id))
+        roboProfKG.add((cn, CU.hasCourseEvent, lec_id))
         roboProfKG.add((lec_id, RDF.type, CU.Lecture))
         # add lecture number
         roboProfKG.add((lec_id, CU.hasLectureNumber, Literal(i)))
@@ -290,6 +291,7 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
             roboProfKG.add((CU[topic], RDF.type, CU.Topic))
             roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
             roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
+            roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
             roboProfKG.add((cn, CU.hasTopic, CU[topic]))
             roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.mongodb.com/docs/manual/sharding/")))
     else:
@@ -297,6 +299,7 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
             roboProfKG.add((CU[topic], RDF.type, CU.Topic))
             roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
             roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
+            roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
             roboProfKG.add((cn, CU.hasTopic, CU[topic]))
             roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.ibm.com/topics/machine-learning")))
 
