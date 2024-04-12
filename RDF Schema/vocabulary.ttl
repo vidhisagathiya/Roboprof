@@ -15,10 +15,22 @@ cu:Course
     rdfs:label      "Course" .
     rdfs:comment "Represents a Course"@en .
 
+cu:CourseEvent
+    a               rdfs:Class ;
+    rdfs:label      "Course Event" .
+    rdfs:comment "Represents a Course Event"@en .
+
 cu:Lecture
     a               rdfs:Class ;
     rdfs:label      "Lecture" .
+    rdfs:subClassOf cu:CourseEvent .
     rdfs:comment "Represents a Lecture"@en .
+
+cu:Lab
+    a               rdfs:Class ;
+    rdfs:label      "Lab" .
+    rdfs:subClassOf cu:CourseEvent .
+    rdfs:comment "Represents a Lab"@en .
 
 cu:LectureContent 
     a               rdfs:Class ;
@@ -85,6 +97,14 @@ cu:hasCourseOutline
     rdfs:comment "Specifies the outline of a course"@en ;
     rdfs:domain  cu:Course ;
     rdfs:range   rdfs:Literal .
+
+cu:hasCourseEvent
+    a            rdf:Property ;
+    rdfs:label   "hasCourseEvent" ;
+    rdfs:comment "Specifies the event of a course"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   cu:CourseEvent .
+
 
 cu:hasCredits
     a            rdf:Property ;
