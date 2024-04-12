@@ -4,8 +4,10 @@ from os import path
 import pandas as pd
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS, FOAF
+from tika import parser
 
 # Define BASE_DATA_DIR
+os.chdir("../Dataset")
 BASE_DATA_DIR = os.getcwd()
 current_directory = os.path.dirname(BASE_DATA_DIR)
 
@@ -351,7 +353,77 @@ def addStudentsToKnowledgeBase(roboProfKG):
 
     return roboProfKG
 
+def generateTXTFromPDF():
+    for course in ["COMP6231", "COMP6741"]:
+        base_dir = os.path.join(BASE_DATA_DIR, f"{course}")
+        txt_dir = os.path.join(BASE_DATA_DIR, f"{course}" + "_TXT")
+
+        base_outline = os.path.join(base_dir, 'course_outline.pdf')
+        txt_outline = os.path.join(txt_dir, 'course_outline.txt')
+
+        print(base_outline)
+        print(txt_outline)
+
+        if os.path.isfile(base_outline) and not os.path.isfile(txt_outline) :
+            file_data = parser.from_file(base_outline)
+
+            # get the content of the pdf file
+            output = file_data['content'].strip().replace('\n', '')
+
+            # convert it to utf-8
+            output = output.encode('utf-8', errors='ignore')
+            # save it
+            with open(txt_outline, 'w') as f:
+                f.write(str(output))
+
+        # Add content
+        for sub_dir in ["Slide", "Worksheet", "Lab", "Reading"]:
+            base_subdir = os.path.join(base_dir, sub_dir)
+            if not os.path.exists(base_subdir):
+                continue
+            txt_subdir = os.path.join(txt_dir, sub_dir)
+            for idf, f in enumerate(sorted(os.listdir(base_subdir))):
+                output_path = os.path.join(txt_subdir, f.split(".")[0] + ".txt")
+                # if we have already generated that file, continue
+                if os.path.isfile(output_path):
+                    continue
+
+                file_data = parser.from_file(os.path.join(base_subdir, f))
+                # get the content of the pdf file
+                output = file_data['content'].strip().replace('\n', '')
+
+                # convert it to utf-8
+                output = output.encode('utf-8', errors='ignore')
+                # save it
+                with open(os.path.join(txt_subdir, f.split(".")[0] + ".txt"), 'w') as f:
+                    f.write(str(output))
+
+def generate_directories():
+    '''
+    Generates a directory structure that mirrors all the course content directories with as txt files.
+    :return: None
+    '''
+    for course in ["COMP6231", "COMP6741"]:
+        dir_name = os.path.join(BASE_DATA_DIR, f"{course}")
+        print(dir_name)
+        if os.path.exists(dir_name) and not os.path.exists(dir_name + "_TXT"):
+            print("inside if")
+            txt_dir = dir_name + "_TXT"
+            os.mkdir(txt_dir)
+        else:
+            continue
+
+        for sub_dir in ["Slide", "Worksheet", "Lab", "Reading"]:
+            dir_path = os.path.join(dir_name, sub_dir)
+            if os.path.exists(dir_path) and not os.path.exists(os.path.join(txt_dir, sub_dir)):
+                txt_subdir = os.path.join(txt_dir, sub_dir)
+                os.mkdir(txt_subdir)
+            else:
+                continue
+
 
 if __name__ == '__main__':
     roboProfKG = Graph()
     generateKnowledgeBase(roboProfKG)
+    generate_directories()
+    generateTXTFromPDF()
