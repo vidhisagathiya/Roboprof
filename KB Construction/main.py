@@ -304,6 +304,18 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
 
     return roboProfKG
 
+def addCompetencies(roboProfKG, course, student):
+    """
+    Add competencies based on completed courses for students.
+    """
+    if course == "COMP6231":
+        for topic in TOPIC_TITLES_6231:
+            roboProfKG.add((CU[student], CU.hasCompetency, CU[topic]))
+    else:        
+        for topic in TOPIC_TITLES_6741:
+            roboProfKG.add((CU[student], CU.hasCompetency, CU[topic]))
+
+    return roboProfKG
 
 def addStudentsToKnowledgeBase(roboProfKG):
     roboProfKG.add((CU["Nilesh"], RDF.type, CU.Student))
@@ -314,12 +326,17 @@ def addStudentsToKnowledgeBase(roboProfKG):
     roboProfKG.add((CU["Nilesh"], CU.isEnrolledIn, CU.COMP6231))
     roboProfKG.add((CU["Nilesh"], CU.isEnrolledIn, CU.COMP6741))
     roboProfKG.add((CU["Nilesh"], CU.COMP6231, Literal("A")))
+    for topic in TOPIC_TITLES_6231:
+            roboProfKG.add((CU["Nilesh"], CU.hasCompetency, CU[topic]))
     roboProfKG.add((CU["Nilesh"], CU.COMP6741, Literal("C")))
+    roboProfKG.add((CU["Nilesh"], CU.COMP6741, Literal("B")))
+    
 
     roboProfKG.add((CU["John"], RDF.type, CU.Student))
     roboProfKG.add((CU["John"], FOAF.name, Literal("John")))
     roboProfKG.add((CU["John"], CU.isEnrolledIn, CU.COMP6741))
     roboProfKG.add((CU["John"], CU.COMP6741, Literal("A")))
+    
 
     roboProfKG.add((CU["Vidhi"], RDF.type, CU.Student))
     roboProfKG.add((CU["Vidhi"], FOAF.name, Literal("Vidhi")))

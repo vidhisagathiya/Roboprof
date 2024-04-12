@@ -15,10 +15,22 @@ cu:Course
     rdfs:label      "Course" .
     rdfs:comment "Represents a Course"@en .
 
+cu:CourseEvent
+    a               rdfs:Class ;
+    rdfs:label      "Course Event" .
+    rdfs:comment "Represents a Course Event"@en .
+
 cu:Lecture
     a               rdfs:Class ;
     rdfs:label      "Lecture" .
+    rdfs:subClassOf cu:CourseEvent .
     rdfs:comment "Represents a Lecture"@en .
+
+cu:Lab
+    a               rdfs:Class ;
+    rdfs:label      "Lab" .
+    rdfs:subClassOf cu:CourseEvent .
+    rdfs:comment "Represents a Lab"@en .
 
 cu:LectureContent 
     a               rdfs:Class ;
@@ -51,6 +63,13 @@ cu:Student
 
 
 # Properties
+cu:Offers
+    a            rdf:Property ;
+    rdfs:label   "Offers" ;
+    rdfs:comment "Specifies the course offered by the University"@en ;
+    rdfs:domain  cu:University ;
+    rdfs:range   rdfs:Literal .
+
 cu:hasCourseSubject
     a            rdf:Property ;
     rdfs:label   "hasCourseSubject" ;
@@ -78,6 +97,14 @@ cu:hasCourseOutline
     rdfs:comment "Specifies the outline of a course"@en ;
     rdfs:domain  cu:Course ;
     rdfs:range   rdfs:Literal .
+
+cu:hasCourseEvent
+    a            rdf:Property ;
+    rdfs:label   "hasCourseEvent" ;
+    rdfs:comment "Specifies the event of a course"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   cu:CourseEvent .
+
 
 cu:hasCredits
     a            rdf:Property ;
@@ -155,3 +182,10 @@ cu:isEnrolledIn
     rdfs:comment "Specifies the courses of a student" ;
     rdfs:domain  cu:Student ;
     rdfs:range   rdfs:Course .
+
+cu:hasCompetency
+    a            rdf:Property ;
+    rdfs:label   "hasCompetency" ;
+    rdfs:comment "Specifies the competencies of a student" ;
+    rdfs:domain  cu:Student ;
+    rdfs:range   rdfs:Topic .
