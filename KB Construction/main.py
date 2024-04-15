@@ -231,18 +231,21 @@ def generateTopics(roboProfKG, cn, row, resource):
                 result = generate_dbpedia_entities(data)
                 for entity, entLabel in result:
                    roboProfKG.add((URIRef(entity), RDF.type, CU.Topic))
-                   roboProfKG.add((URIRef(entity), CU.hasProvenance, CU[id]))
-                   roboProfKG.add((URIRef(entity), CU.hasMaterials, CU[filePath]))
                    roboProfKG.add((URIRef(entity), DBP.subject, URIRef(entity)))
                    roboProfKG.add((URIRef(entity), RDFS.label, Literal(entLabel)))
                    roboProfKG.add((URIRef(entity), FOAF.name, Literal(entLabel)))
                    roboProfKG.add((cn, CU.hasTopic, URIRef(entity)))
+                   roboProfKG.add((URIRef(entity), CU.hasProvenance, CU[id]))
                    if resource == "Slide":
                         lec_id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], "Lecture", idf+1)]
                         roboProfKG.add((lec_id, CU.topicsCovered, URIRef(entity))) # Lecture has these topics covered
+                        roboProfKG.add((URIRef(entity), CU.hasMaterials, URIRef(filePath))) 
                    if resource == "Lab":
                        lab_id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], "Lab", idf+1)]
                        roboProfKG.add((lab_id, CU.topicsCovered, URIRef(entity))) # Lab has these topics covered
+                       roboProfKG.add((URIRef(entity), CU.hasMaterials, URIRef(filePath))) 
+                   if resource == "Worksheet":
+                       roboProfKG.add((URIRef(entity), CU.hasMaterials, URIRef(filePath))) 
                     
 
 

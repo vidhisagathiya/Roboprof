@@ -60,7 +60,7 @@ class TopicsCourseLecture(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         university = tracker.slots['university']
-        
+
         query = f"""
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -90,7 +90,8 @@ WHERE {{
             courses_offered.append(courseName)
 
         if not courses_offered:
-            dispatcher.utter_message(text=f"I have no knowledge of courses offered by {university}.")
+            dispatcher.utter_message(
+                text=f"I have no knowledge of courses offered by {university}.")
         else:
             answer = "Course offered by " + university + ":\n"
             for course in courses_offered:
@@ -137,10 +138,10 @@ WHERE {{
         for result in results["bindings"]:
             course = result["courseName"]
             topicLink = result['link']
-            
+
             courseValue = course['value']
             topicLinkValue = topicLink['value']
-            
+
             row = {"courseName": courseValue, "link": topicLinkValue}
             courses.append(row)
 
@@ -153,19 +154,21 @@ WHERE {{
         topic = tracker.slots['topic'].replace(" ", "")
 
         courses = self.response_request(topic)
-        
+
         if not courses:
-            dispatcher.utter_message(text=f"No course covers the topic {topic}.")
+            dispatcher.utter_message(
+                text=f"No course covers the topic {topic}.")
         else:
             answer = f"The following courses cover the topic {topic}:\n"
             for course in courses:
-                answer = answer + course['courseName'] + ": " + course['link'] + "\n"
+                answer = answer + course['courseName'] + \
+                    ": " + course['link'] + "\n"
             dispatcher.utter_message(text=f"{answer}")
 
         return []
 
 
-# # A1-3. Which [topics] are covered in [course] during [lecture number]?
+# A1-3. Which [topics] are covered in [course] during [lecture number]?
 class WhichTopicInCourseDuringLecture(Action):
 
     def name(self) -> Text:
@@ -208,10 +211,10 @@ WHERE {{
         for result in results["bindings"]:
             topicName = result["topicName"]
             topic = result["topics"]
-            
+
             topicNameValue = topicName["value"]
             topicValue = topic["value"]
-            
+
             row = {"topicName": topicNameValue, "topic": topicValue}
             topics.append(row)
 
@@ -234,13 +237,15 @@ WHERE {{
         lectureNumber = lectureValues[2]
 
         topics = self.response_request(csubject, cnumber, lectureNumber)
-        
+
         if not topics:
-            dispatcher.utter_message(text=f"No topics covered in {lectureNumber} or {lectureNumber} did not happen.")
+            dispatcher.utter_message(
+                text=f"No topics covered in {lectureNumber} or {lectureNumber} did not happen.")
         else:
             answer = f"The following topics were covered in the lecture {lectureNumber} of the course {csubject}{cnumber}:\n"
             for topic in topics:
-                answer = answer + topic['topicName'] + ": " + topic['topic'] + "\n"
+                answer = answer + topic['topicName'] + \
+                    ": " + topic['topic'] + "\n"
             dispatcher.utter_message(text=f"{answer}")
 
         return []
@@ -281,10 +286,11 @@ WHERE {{
         for result in results["bindings"]:
             courseLabel = result["courseLabel"]
             courseTitle = result['title']
-            
+
             courseLabelValue = courseLabel["value"]
             courseTitleValue = courseTitle["value"]
-            courses.append({"courseLabel": courseLabelValue,"title": courseTitleValue})
+            courses.append({"courseLabel": courseLabelValue,
+                           "title": courseTitleValue})
         return courses
 
     def run(self, dispatcher: CollectingDispatcher,
@@ -296,15 +302,73 @@ WHERE {{
         courses = self.response_request(subject)
 
         if not courses:
-            dispatcher.utter_message(text=f"{subject} does not offer any courses.")
+            dispatcher.utter_message(
+                text=f"{subject} does not offer any courses.")
         else:
             answer = f"The courses offered by the subject {subject} are:\n"
             for course in courses:
-                answer = answer + course['courseLabel'] + ": " + course['title'] + "\n"
+                answer = answer + course['courseLabel'] + \
+                    ": " + course['title'] + "\n"
             dispatcher.utter_message(text=f"{answer}")
 
         return []
 
+# A1-5. What [materials] (slides, readings) are recommended for [topic] in [course] [number]?
+class MaterialForCourse(Action):
+
+    def name(self) -> Text:
+        return "action_about_materials"
+
+    def response_request(self, csubject, cnumber, topic):
+        query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+SELECT ?material
+WHERE {{
+?course cu:hasTopic ?topics ;
+cu:hasCourseSubject ?courseSubject; cu:hasCourseNumber ?courseNumber .
+?topics foaf:name ?topicName ;
+cu:hasMaterials ?material .
+FILTER(?courseSubject = "{csubject}")
+filter(?courseNumber = "{cnumber}")
+filter(?topicName= "{topic}")
+}}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
+
+        # the result is a Python dictionary:
+        results = y["results"]
+        materials = []
+        bindings = results["bindings"]
+
+        for material in bindings:
+            materialValue = material['material']['value']
+            materials.append({'material': materialValue})
+
+        return materials
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
+        topic = tracker.slots['topic'].strip()
+        materials = self.response_request(csubject, cnumber, topic)
+        if not materials:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist or is not offered by {university}.")
+        else:
+            answer = f"The course {course} has the following material:\n"
+            for material in materials:
+                answer = answer + material['material'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
 
 #  A1-6. How many credits is [course] [number] worth?
 class ContentCourseLecture(Action):
@@ -338,7 +402,7 @@ WHERE {{
         credits = results["bindings"][0]['credits']
         courseLabelValue = courseLabel['value']
         creditsValue = credits['value']
-        return {'courseLabel':courseLabelValue, 'credits': creditsValue}
+        return {'courseLabel': courseLabelValue, 'credits': creditsValue}
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -354,7 +418,8 @@ WHERE {{
         content = self.response_request(csubject, cnumber)
 
         if not content:
-            dispatcher.utter_message(text=f"The course {course} does not exist or is not offered by {university}.")
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist or is not offered by {university}.")
         else:
             answer = f"The course {course} is of {content['credits']} credits."
             dispatcher.utter_message(text=f"{answer}")
@@ -418,229 +483,431 @@ WHERE {{
 #         return []
 
 
-# # Q7) Does [course] have labs?
-# class ActionCourseLabs(Action):
+# 7. For [course] [number], what additional resources (links to web pages) are available?
+class AdditionalResources(Action):
 
-#     def name(self) -> Text:
-#         return "action_course_labs"
+    def name(self) -> Text:
+        return "action_about_additional_resources"
 
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def response_request(self, csubject, cnumber):
+        query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
 
-#         course = tracker.slots['course']
+SELECT ?links
+WHERE {{
+  	?course rdfs:seeAlso ?links;
+           cu:hasCourseSubject ?courseSubject;
+           cu:hasCourseNumber ?courseNumber .
+  
+  FILTER(?courseSubject = "EDUC")
+  FILTER(?courseNumber = "301")
+}}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
 
-#         values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
-#         csubject = values[1].upper().replace(" ", "")
-#         cnumber = values[2]
+        # the result is a Python dictionary:
+        results = y["results"]
+        resources = []
+        bindings = results["bindings"]
 
-#         if csubject != "COMP" or (cnumber != "346" and cnumber != "474"):
-#             dispatcher.utter_message(text="Sorry, we currently only support finding whether or not COMP 474 or COMP 346 have labs.")
-#             return
+        for resource in bindings:
+            resourceValue = resource['links']['value']
+            resources.append({'link': resourceValue})
 
-#         response = requests.post(SPARQL_ENDPOINT,
-#                                  data={'query': """
-#                                     PREFIX vivo: <http://vivoweb.org/ontology/core#>
-#                                     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#                                     PREFIX DC: <http://purl.org/dc/terms/>
-#                                     PREFIX acad: <http://acad.io/schema#>
-#                                     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-#                                     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-#                                     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#                                     PREFIX acaddata: <http://acad.io/data#>
+        return resources
 
-#                                     ASK{
-#                                     ?course a vivo:Course.
-#                                     ?course acad:courseNumber "%s"^^xsd:int.
-#                                     ?course acad:courseSubject "%s"^^xsd:string.
-#                                     ?course acad:courseHas acad:Lab.
-#                                     }
-#                                     """ % (cnumber, csubject)
-#                                        })
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
 
-#         y = json.loads(response.text)
-
-#         result = y["boolean"]
-
-#         if result:
-#             dispatcher.utter_message(text=f"YES, {csubject} {cnumber} has labs.")
-#         else:
-#             dispatcher.utter_message(text=f"NO, {csubject} {cnumber} does not have labs.")
-
-#         return []
-
-
-# # Q8) What courses does the [department] department offer?
-# class ActionDepartmentCourses(Action):
-
-#     def name(self) -> Text:
-#         return "action_department_courses"
-
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-#         department = tracker.slots['department'].strip()
-
-#         if department.lower() == "csse" or department.lower() == "computer science and software engineering" or \
-#                 department.lower() == "computer science" or department.lower() == "software engineering":
-#             department = "Computer Science and Software Engineering (CSSE)"
-#         elif department.lower() == "bcce" or \
-#                 department.lower() == "building, civil and environmental engineering" or \
-#                 department.lower() == "building engineering" or department.lower() == "civil engineering" or \
-#                 department.lower() == "environmental engineering":
-#             department = "Building, Civil and Environmental Engineering (BCEE)"
-#         elif department.lower() == "ece" or department.lower() == "electrical engineering" \
-#                 or department.lower() == "computer engineering":
-#             department = "Electrical and Computer Engineering (ECE)"
-
-#         response = requests.post(SPARQL_ENDPOINT,
-#                                  data={'query': """
-#                                             PREFIX vivo: <http://vivoweb.org/ontology/core#>
-#                                             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#                                             PREFIX DC: <http://purl.org/dc/terms/>
-#                                             PREFIX acad: <http://acad.io/schema#>
-#                                             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-#                                             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-#                                             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#                                             PREFIX acaddata: <http://acad.io/data#>
-
-#                                             SELECT  ?csubject ?cnumber ?cname
-#                                             WHERE{
-#                                                 ?course a vivo:Course;
-#                                                 foaf:name ?cname;
-#                                                 acad:courseNumber ?cnumber;
-#                                                 acad:courseSubject ?csubject;
-#                                                 vivo:AcademicDepartment "%s"^^xsd:string.
-#                                             }
-#                                             """ % department
-#                                        })
-
-#         y = json.loads(response.text)
-
-#         results = y["results"]
-#         bindings = results["bindings"]
-
-#         course = ""
-#         courses_offered = []
-
-#         for result in bindings:
-#             for key in result:
-#                 if key == "csubject":
-#                     for subKey in result[key]:
-#                         if subKey == "value":
-#                             course = result[key][subKey]
-#                 if key == "cnumber":
-#                     for subKey in result[key]:
-#                         if subKey == "value":
-#                             course = course + " " + result[key][subKey]
-#             courses_offered.append(course)
-
-#         dispatcher.utter_message(text=f"\n{department} offers:\n")
-
-#         for course in courses_offered:
-#             dispatcher.utter_message(text=f" - {course}\n")
-
-#         return []
+        resources = self.response_request(csubject, cnumber)
+        if not resources:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The course {course} has the following additional resources:\n"
+            for resource in resources:
+                answer = answer + resource['link'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
 
 
-# # Q9) How many courses does the university [university] offer?
-# class ActionNumberOfUniCourses(Action):
+# A1 - 8. Detail the content (slides, worksheets, readings) available for [lecture number] in [course] [number].
+class DetailContentForCourse(Action):
 
-#     def name(self) -> Text:
-#         return "action_number_of_uni_courses"
+    def name(self) -> Text:
+        return "action_about_detail_content"
 
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def response_request(self, csubject, cnumber, lnumber):
+        query = f"""
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
 
-#         university = tracker.slots['university']
+SELECT ?contentURI
+WHERE {{
+  cu:Concordia_University cu:Offers ?course .
+  	?course cu:hasCourseSubject ?subject ;
+           cu:hasCourseNumber ?number ;
+           cu:hasLecture ?lecture .
+  	?lecture cu:hasLectureContent ?content ;
+            cu:hasLectureNumber ?lecNumber.
+  ?content rdfs:seeAlso ?contentURI .
+  FILTER(?subject = "{csubject}")
+  FILTER(?number = "{cnumber}")
+  FILTER(?lecNumber = {lnumber})
+}}
 
-#         if "concordia" in university.lower() or "university" in university.lower():
-#             university = "Concordia_University"
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
 
-#         response = requests.post(SPARQL_ENDPOINT,
-#                                  data={'query': """
-#                                                     PREFIX vivo: <http://vivoweb.org/ontology/core#>
-#                                                     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#                                                     PREFIX DC: <http://purl.org/dc/terms/>
-#                                                     PREFIX acad: <http://acad.io/schema#>
-#                                                     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-#                                                     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-#                                                     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#                                                     PREFIX acaddata: <http://acad.io/data#>
+        # the result is a Python dictionary:
+        results = y["results"]
+        contents = []
+        bindings = results["bindings"]
 
-#                                                     SELECT  (COUNT(?course) AS ?coursesNum)
-#                                                     WHERE{
-#                                                        acaddata:%s a acad:University.
-#                                                        acaddata:%s acad:offers ?course.
-#                                                     } GROUP BY ?uni
-#                                                     """ % (university, university)
-#                                        })
+        for content in bindings:
+            contentValue = content['contentURI']['value']
+            contents.append({'content': contentValue})
 
-#         y = json.loads(response.text)
+        return contents
 
-#         results = y["results"]
-#         bindings = results["bindings"]
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
 
-#         numberOfCourses = 0
+        courseEvent = tracker.slots['lecture'].strip()
+        courseEventValues = re.split(
+            r'([^\d]*)(\d.*)', courseEvent, maxsplit=1)
+        eventNumber = courseEventValues[2]
 
-#         for result in bindings:
-#             for key in result:
-#                 if key == "coursesNum":
-#                     for subKey in result[key]:
-#                         if subKey == "value":
-#                             numberOfCourses = result[key][subKey]
-
-#         university = university.replace("_", " ")
-
-#         dispatcher.utter_message(text=f"\n {university} offers a total of {numberOfCourses} courses")
+        contents = self.response_request(csubject, cnumber, eventNumber)
+        if not contents:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The course {course} has the following contents:\n"
+            for content in contents:
+                answer = answer + content['content'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
 
 
-# # Q10) How many topics are covered in [course]?
-# class ActionNumTopicsInCourse(Action):
+# A1-9. What reading materials are recommended for studying [topic] in [course]?
+class ReadingMaterialForStudying(Action):
 
-#     def name(self) -> Text:
-#         return "action_num_topics_in_course"
+    def name(self) -> Text:
+        return "action_about_reading_material"
 
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def response_request(self, csubject, topic):
+        query = f"""
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+SELECT distinct ?materials
+WHERE {{
+?course cu:hasTopic ?topics ;
+cu:hasCourseSubject ?courseSubject; cu:hasCourseNumber ?courseNumber .
+?topics foaf:name ?topicName ;
+cu:hasMaterials ?materials .
+FILTER(?courseSubject = "{csubject}")
+filter(?topicName= "{topic}")
+}}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
 
-#         course = tracker.slots['course']
+        # the result is a Python dictionary:
+        results = y["results"]
+        materials = []
+        bindings = results["bindings"]
 
-#         values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
-#         csubject = values[1].upper().replace(" ", "")
-#         cnumber = values[2]
+        for material in bindings:
+            materialValue = material['materials']['value']
+            materials.append({'material': materialValue})
 
-#         response = requests.post(SPARQL_ENDPOINT,
-#                                  data={'query': """
-#                                                 PREFIX vivo: <http://vivoweb.org/ontology/core#>
-#                                                 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#                                                 PREFIX DC: <http://purl.org/dc/terms/>
-#                                                 PREFIX acad: <http://acad.io/schema#>
-#                                                 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-#                                                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-#                                                 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#                                                 PREFIX acaddata: <http://acad.io/data#>
+        return materials
 
-#                                                 SELECT (COUNT(?topic) AS ?topicNum)
-#                                                 WHERE {
-#                                                     ?course a vivo:Course.
-#                                                     ?course foaf:name ?courseName.
-#                                                     ?course acad:courseNumber "%s"^^xsd:int.
-#                                                     ?course acad:courseSubject "%s"^^xsd:string.
-#                                                     ?course acad:coversTopic ?topic.
-#                                                 } GROUP BY ?course ?courseName
-#                                                 """ % (cnumber, csubject)
-#                                        })
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
 
-#         y = json.loads(response.text)
+        topic = tracker.slots['topic'].strip()
 
-#         results = y["results"]
-#         bindings = results["bindings"]
+        materials = self.response_request(csubject, topic)
+        if not materials:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The course {course} has the following maaterials to study:\n"
+            for material in materials:
+                answer = answer + material['material'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
 
-#         dispatcher.utter_message(text=f"{csubject} {cnumber} covers {bindings[0]['topicNum']['value']} topics")
+# A1- 10. What competencies [topics] does a student gain after completing [course] [number]?
+class CompetenciesOfStudent(Action):
+
+    def name(self) -> Text:
+        return "action_about_competencies_of_student"
+
+    def response_request(self, csubject, cnumber):
+        query = f"""
+        PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?topicName ?topicLink
+WHERE {{
+  ?course a cu:Course .
+  ?course cu:hasTopic ?topic .
+  ?topic foaf:name ?topicName;
+         dbp:subject ?topicLink .
+  ?course cu:hasCourseSubject ?subject .
+  ?course cu:hasCourseNumber ?number .
+  FILTER(?subject = "{csubject}")
+  FILTER(?number = "{cnumber}")
+}}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
+
+        # the result is a Python dictionary:
+        results = y["results"]
+        competencies = []
+        bindings = results["bindings"]
+
+        for competency in bindings:
+            competencyValue = competency['topicName']['value']
+            linkValue = competency['topicLink']['value']
+            competencies.append({'topicName': competencyValue, "topicLink": linkValue})
+
+        return competencies
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
+
+        competencies = self.response_request(csubject, cnumber)
+        if not competencies:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The student will gain the following competencies by completing the {course} course:\n"
+            for competency in competencies:
+                answer = answer + competency['topicName'] + ": "+ competency['topicLink'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
+
+# 11. What grades did [student] achieve in [course] [number]?
+class GradesOfStudent(Action):
+
+    def name(self) -> Text:
+        return "action_about_student_grades"
+
+    def response_request(self, csubject, cnumber, student):
+        query = f"""
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?studentName ?gradeValue
+        WHERE {{
+          ?student cu:isEnrolledIn ?course;
+                 foaf:name ?studentName  ;
+                 cu:hasStudentID ?studentID .
+          ?course cu:hasCourseSubject ?subject ;
+  					cu:hasCourseNumber ?number .
+  ?student ?course ?gradeValue
+  FILTER(?subject = "{csubject}")
+  FILTER(?number = "{cnumber}")
+  filter(?studentID = "{student}")
+        }}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
+
+        # the result is a Python dictionary:
+        results = y["results"]
+        grades = []
+        bindings = results["bindings"]
+
+        for grade in bindings:
+            studentName = grade['studentName']['value']
+            grade = grade['gradeValue']['value']
+            grades.append({'studentName': studentName, "gradeValue": grade})
+
+        return grades
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print(tracker.slots)
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
+
+        student = tracker.slots['student'].strip()
+
+        grades = self.response_request(csubject, cnumber, student)
+        if not grades:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The student with ID {student} has the following grades in {course} course:\n"
+            for grade in grades:
+                answer = answer + grade['studentName'] + ": "+ grade['gradeValue'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
+
+# 12. Which [students] have completed [course] [number]?
+class StudentCourseCompleted(Action):
+
+    def name(self) -> Text:
+        return "action_about_student_courses_completed"
+
+    def response_request(self, csubject, cnumber):
+        query = f"""
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cu: <http://is-concordia.io/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?id ?studentName 
+        WHERE {{
+          ?student cu:isEnrolledIn ?course;
+                 foaf:name ?studentName  ;
+                 cu:hasStudentID ?id .
+          ?course cu:hasCourseSubject ?subject ;
+  					cu:hasCourseNumber ?number .
+  ?student ?course ?gradeValue
+  FILTER(?subject = "{csubject}")
+  FILTER(?number = "{cnumber}")
+        }}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
+
+        # the result is a Python dictionary:
+        results = y["results"]
+        students = []
+        bindings = results["bindings"]
+
+        for student in bindings:
+            studentName = student['studentName']['value']
+            studentId= student['id']['value']
+            
+            students.append({'studentId': studentId, "studentName": studentName})
+
+        return students
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        course = tracker.slots['course']
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+        csubject = values[1].upper().strip()
+        cnumber = values[2].strip()
+
+        students = self.response_request(csubject, cnumber)
+        if not students:
+            dispatcher.utter_message(
+                text=f"The course {course} does not exist.")
+        else:
+            answer = f"The following students have completed the {course} course:\n"
+            for student in students:
+                answer = answer + student['studentName'] + ": "+ student['studentId'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
+
+# A1 -13. Print a transcript for a [student], listing all the course taken with their grades.
+class StudentTranscript(Action):
+
+    def name(self) -> Text:
+        return "action_about_student_transcript"
+
+    def response_request(self, student):
+        query = f"""
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX teach: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/>
+
+SELECT ?name ?id ?courseTitle ?grade
+        WHERE {{
+          ?student cu:isEnrolledIn ?course .
+  ?course teach:courseTitle ?courseTitle .
+  		?student foaf:name ?name .
+  		?student cu:hasStudentID ?id .
+  		?student ?course ?grade
+  FILTER(?id = "{student}")
+        }}
+        """
+        response = requests.post(SPARQL_ENDPOINT, data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
+        y = json.loads(response.text)
+
+        # the result is a Python dictionary:
+        results = y["results"]
+        grades = []
+        bindings = results["bindings"]
+
+        for grade in bindings:
+            studentName = grade['studentName']['value']
+            studentId = grade['id']['value']
+            courseTitle = grade['courseTitle']['value']
+            grade = grade['gradeValue']['value']
+            grades.append({'studentId': studentId, 'studentName': studentName,"courseTitle":courseTitle, "gradeValue": grade})
+
+        return grades
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print(tracker.slots)
+        student = tracker.slots['student']
+
+        grades = self.response_request(student)
+        if not grades:
+            dispatcher.utter_message(
+                text=f"The student {student} does not exist.")
+        else:
+            answer = f"The transcript for the student with ID {student} \n"
+            for grade in grades:
+                answer = answer + grade['id'] + "\t" + grade['studentName'] + "\t" + grade['courseTitle'] + "\t" + grade['gradeValue'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
+        return []
 
 # #Need this
 # #A2-Q3 - Which topics are covered in <course event>?"
@@ -652,7 +919,6 @@ class ActionTopicsCovered(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        print(tracker.slots)
         course = tracker.slots['course']
         values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
         csubject = values[1].upper().strip()
@@ -737,6 +1003,8 @@ WHERE {{
 
 # Need this
 # A2-Q2 What is course [course] about?
+
+
 class CourseDescription(Action):
 
     def name(self) -> Text:
@@ -766,7 +1034,6 @@ WHERE {{
     filter(?courseNumber = "{cnumber}")
 }}
 """}
-        print(data)
         response = requests.post(SPARQL_ENDPOINT,
                                  data=data)
 
@@ -776,7 +1043,6 @@ WHERE {{
 
         # the result is a Python dictionary:
         results = y["results"]
-        print(results)
 
         if not results or not results["bindings"]:
             dispatcher.utter_message(

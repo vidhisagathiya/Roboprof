@@ -12,15 +12,18 @@ intents:
   - about_course_lecture_topics
   - about_course_uni_topic
   - about_courses_within_subject
-  # - about_content_course_lecture
-  # - about_course_components
-  # - about_course_labs
-  # - about_department_courses
-  # - about_number_of_uni_courses
-  # - about_num_topics_in_course
+  - about_detail_content
+  - about_student_grades
+  - about_competencies_of_student
+  - about_department_courses
+  - about_reading_material
+  - about_additional_resources
   - about_courses_offered_by_university
   - about_topics_covered
   - about_credits
+  - about_materials
+  - about_student_courses_completed
+  - about_student_transcript
 
 entities:
   - course
@@ -30,21 +33,24 @@ entities:
   - department
   - courseEvent
   - subject
+  - student
 
 actions:
   - action_course_info
-  # - action_course_components
-  # - action_course_labs
+  - action_about_reading_material
+  - action_about_competencies_of_student
   - action_courses_within_subject
-  # - action_number_of_uni_courses
-  # - action_num_topics_in_course
+  - action_about_student_grades
+  - action_about_student_courses_completed
   - action_topics_covered
   - action_course_lecture_topics
   - action_course_uni_topic
-  # - action_dep_offer_course
-  # - action_content_course_lecture
+  - action_about_detail_content
+  - action_about_additional_resources
   - action_courses_offered_by_university
   - action_about_credits
+  - action_about_materials
+  - action_about_student_transcript
 
 slots:
   course:
@@ -84,6 +90,12 @@ slots:
       - type: from_entity
         entity: topic
   subject:
+    type: any
+    initial_value: "unknown"
+    mappings:
+      - type: from_entity
+        entity: subject
+  student:
     type: any
     initial_value: "unknown"
     mappings:

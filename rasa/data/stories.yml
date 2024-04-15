@@ -34,30 +34,30 @@ stories:
     - intent: about_course
     - action: action_course_info
 
-# - story: get course components
-#   steps:
-#     - intent: about_course_components
-#     - action: action_course_components
+- story: get students who completed courses
+  steps:
+    - intent: about_student_courses_completed
+    - action: action_about_student_courses_completed
 
-# - story: get course labs
-#   steps:
-#     - intent: about_course_labs
-#     - action: action_course_labs
+- story: get student grades
+  steps:
+    - intent: about_student_grades
+    - action: action_about_student_grades
 
-# - story: get department courses
-#   steps:
-#     - intent: about_department_courses
-#     - action: action_department_courses
+- story: get competancies of student
+  steps:
+    - intent: about_competencies_of_student
+    - action: action_about_competencies_of_student
 
 - story: get credits for course
   steps:
     - intent: about_credits
     - action: action_about_credits
 
-# - story: get num topics in course
-#   steps:
-#     - intent: about_num_topics_in_course
-#     - action: action_num_topics_in_course
+- story: get reading material for studying
+  steps:
+    - intent: about_reading_material
+    - action: action_about_reading_material
 
 - story: get topics covered
   steps:
@@ -83,16 +83,37 @@ stories:
     - intent: about_course_uni_topic
     - action: action_course_uni_topic
 
-- story: get department that offers course
+- story: get courses within a subject
   steps:
     - intent: greet
     - action: utter_greet
     - intent: about_courses_within_subject
     - action: action_courses_within_subject
 
-# - story: get content of course lecture
-#   steps:
-#     - intent: greet
-#     - action: utter_greet
-#     - intent: about_content_course_lecture
-#     - action: action_content_course_lecture
+- story: get materials for course
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: about_materials
+    - action: action_about_materials
+
+- story: get additional resources for course
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: about_additional_resources
+    - action: action_about_additional_resources
+
+- story: get content of course lecture
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: about_detail_content
+    - action: action_about_detail_content
+
+- story: get transcript of student
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: about_student_transcript
+    - action: action_about_student_transcript
