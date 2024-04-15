@@ -5,6 +5,11 @@ import pandas as pd
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS, FOAF
 from tika import parser
+import spacy
+
+nlp = spacy.load('en_core_web_lg')
+# add the pipeline stage
+nlp.add_pipe('dbpedia_spotlight', config={'dbpedia_rest_endpoint': 'http://localhost:2222/rest'})
 
 # Define BASE_DATA_DIR
 os.chdir("../Dataset")
@@ -186,6 +191,7 @@ def generateKnowledgeBase(roboProfKG):
             roboProfKG.add((cn, CU.hasCourseSubject, Literal(row['Course code'])))
             roboProfKG.add((cn, CU.hasCourseNumber, Literal(row['Course number'])))
             roboProfKG.add((cn, CU.hasCredits, Literal(row['Class Units'])))
+            roboProfKG.add((cn, RDFS.label, Literal(row['Course code']+row['Course number'])))
             if cn not in CORE_COURSES:
                 roboProfKG.add((cn, TEACH.courseDescription,
                                Literal(row['Description'])))
@@ -201,6 +207,45 @@ def generateKnowledgeBase(roboProfKG):
     roboProfKG.serialize(destination=save_path_ttl, format="turtle")
     roboProfKG.serialize(destination=save_path_rdf, format="ntriples")
 
+def generateTopics(roboProfKG, cn, row, resource):
+    dir_name = os.path.join(BASE_DATA_DIR, "{}{}").format(row['Course code'],row['Course number'])
+    dir_name_txt = os.path.join(BASE_DATA_DIR, "{}{}_TXT").format(row['Course code'],row['Course number'])
+    dir_path = os.path.join(dir_name, resource)
+    dir_path_txt = os.path.join(dir_name_txt, resource)
+    if os.path.isdir(dir_path):
+        for idf, file in enumerate(sorted(os.listdir(dir_path))):
+            id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], resource, idf+1)]
+            print(id)
+            filePath = os.path.join(dir_path, file)
+            filePathTxt = os.path.join(dir_path_txt, file.split('.')[0] + ".txt")
+            # print(filePathTxt)
+    #            if sub_dir in ['Lab', 'Worksheet']:
+    #                course_event_id = CU["{}{}{}{}".format(row['Course code'], row['Course number'], sub_dir, idf + 1)]
+    #            else:
+    #                course_event_id = CU["{}{}Lec{}".format(row['Course code'], row['Course number'], idf + 1)]
+    #            roboProfKG.add((f_uri, RDF.type, CU[sub_dir]))
+    #            roboProfKG.add((course_event_id, CU.HasMaterial, f_uri))
+    #            # Extract entities of file with spotlight
+            with open(filePathTxt, 'r') as f:
+                data = f.read()
+                result = generate_dbpedia_entities(data)
+                for entity, entLabel in result:
+                   roboProfKG.add((URIRef(entity), RDF.type, CU.Topic))
+                   roboProfKG.add((URIRef(entity), CU.hasProvenance, CU[id]))
+                   roboProfKG.add((URIRef(entity), CU.hasMaterials, CU[filePath]))
+                   roboProfKG.add((URIRef(entity), DBP.subject, URIRef(entity)))
+                   roboProfKG.add((URIRef(entity), RDFS.label, Literal(entLabel)))
+                   roboProfKG.add((URIRef(entity), FOAF.name, Literal(entLabel)))
+                   roboProfKG.add((cn, CU.hasTopic, URIRef(entity)))
+                   if resource == "Slide":
+                        lec_id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], "Lecture", idf+1)]
+                        roboProfKG.add((lec_id, CU.topicsCovered, URIRef(entity))) # Lecture has these topics covered
+                   if resource == "Lab":
+                       lab_id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], "Lab", idf+1)]
+                       roboProfKG.add((lab_id, CU.topicsCovered, URIRef(entity))) # Lab has these topics covered
+                    
+
+
 
 def addCoreCoursesKnowledge(roboProfKG, row, cn):
     '''
@@ -215,95 +260,98 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
     if row['Course number'] == '6231':
         lecture_number = 11
         worksheets = 11
+        labs = 11
         outline_path = os.path.join(current_directory, "Dataset", "COMP6231", "course_outline.pdf")
     else:
         lecture_number = 9
         worksheets = 8
+        labs = 11
         outline_path = os.path.join(current_directory, "Dataset", "COMP6741", "course_outline.pdf")
 
     roboProfKG.add((cn, CU.hasCourseOutline, URIRef(outline_path)))
     # Add Lectures
-    topic_index = 0
-    num_topics_per_lecture = len(TOPIC_TITLES_6231) // lecture_number
+    # topic_index = 0
+    # num_topics_per_lecture = len(TOPIC_TITLES_6231) // lecture_number
     for i in range(1, lecture_number):
         lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], i)]
         # add lecture for course
-        roboProfKG.add((cn, CU.hasLecture, lec_id))
-        roboProfKG.add((cn, CU.hasCourseEvent, lec_id))
         roboProfKG.add((lec_id, RDF.type, CU.Lecture))
         # add lecture number
         roboProfKG.add((lec_id, CU.hasLectureNumber, Literal(i)))
+        roboProfKG.add((cn, CU.hasLecture, lec_id))
         # Add topics, Lecture Name, description
         if row['Course number'] == '6231':
             # add Lecture Name/Title
-            roboProfKG.add((lec_id, FOAF.name, Literal(LEC_TITLES_6231[i - 1])))
+            # roboProfKG.add((lec_id, FOAF.name, Literal(LEC_TITLES_6231[i - 1])))
             # add course description
-            roboProfKG.add((cn, TEACH.courseDescription,Literal(COMP6231_DESC)))
-            for topic in TOPIC_TITLES_6231[topic_index:topic_index+num_topics_per_lecture]:
-                roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
+            roboProfKG.add((cn, TEACH.courseDescription, Literal(COMP6231_DESC)))
+            # for topic in TOPIC_TITLES_6231[topic_index:topic_index+num_topics_per_lecture]:
+            #     roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
         else:
             # add Lecture Name/Title
-            roboProfKG.add(
-                (lec_id, FOAF.name, Literal(LEC_TITLES_6741[i - 1])))
+            # roboProfKG.add(
+            #     (lec_id, FOAF.name, Literal(LEC_TITLES_6741[i - 1])))
             # add course description
             roboProfKG.add((cn, TEACH.courseDescription,
                            Literal(COMP6741_DESC)))
-            for topic in TOPIC_TITLES_6741[topic_index:topic_index+num_topics_per_lecture]:
-                roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
-        topic_index += num_topics_per_lecture
-
-    if row['Course number'] == '6231':
-        if topic_index < len(TOPIC_TITLES_6231):
-                for topic in TOPIC_TITLES_6231[topic_index:]:
-                    roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
+            # for topic in TOPIC_TITLES_6741[topic_index:topic_index+num_topics_per_lecture]:
+            #     roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
+        # topic_index += num_topics_per_lecture
+    generateTopics(roboProfKG, cn, row, "Lecture")
+    roboProfKG.add((cn, CU.hasCourseEvent, Literal("Lecture")))
+    # if row['Course number'] == '6231':
+    #     if topic_index < len(TOPIC_TITLES_6231):
+    #             for topic in TOPIC_TITLES_6231[topic_index:]:
+    #                 roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
     # Add worksheets
     for worksheet in range(1, worksheets):
-        if row['Course number'] == '6231':
-            worksheet_path = os.path.join(current_directory, "Dataset", "Comp6231", "Worksheet", "worksheet{}.pdf".format(worksheet))
-            worksheet_id = URIRef(worksheet_path)
-            roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
-            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], worksheet)]
-            roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))
-        else:
-            worksheet_path = os.path.join(current_directory, "Dataset", "Comp6231", "Worksheet", "worksheet{}.pdf".format(worksheet))
-            worksheet_id = URIRef(worksheet_path)
-            roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
-            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], worksheet)]
-            roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))
+        worksheet_id = CU["{}{}_Worksheet#{}".format(row['Course code'], row['Course number'], worksheet)]
+        worksheet_path = os.path.join(current_directory, "Dataset", row['Course code']+row['Course number'], "Worksheet", "worksheet{}.pdf".format(worksheet))
+        roboProfKG.add((worksheet_id, RDF.type, CU.Worksheet))
+        roboProfKG.add((worksheet_id, RDFS.seeAlso, URIRef(worksheet_path)))
+        lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], worksheet)]
+        roboProfKG.add((lec_id, CU.hasLectureContent, worksheet_id))        
+    generateTopics(roboProfKG, cn, row, "Worksheet")
 
-        # add slides
+    # add slides
     for slide in range(1, lecture_number):
-        if row['Course number'] == '6231':
-            slide_path = os.path.join(current_directory, "Dataset", "Comp6231", "Slide", "slide{}.pdf".format(slide))
-            slide_id = URIRef(slide_path)
-            roboProfKG.add((slide_id, RDF.type, CU.Slide))
-            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], slide)]
-            roboProfKG.add((lec_id, CU.hasLectureContent, slide_id))
+        slide_id = CU["{}{}_Slide#{}".format(row['Course code'], row['Course number'], slide)]
+        slide_path = os.path.join(current_directory, "Dataset", row['Course code']+row['Course number'], "Slide", "slide{}.pdf".format(slide))
+        roboProfKG.add((slide_id, RDF.type, CU.Slide))
+        roboProfKG.add((slide_id, RDFS.seeAlso, URIRef(slide_path)))
+        lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], slide)]
+        roboProfKG.add((lec_id, CU.hasLectureContent, slide_id))
+    generateTopics(roboProfKG, cn, row, "Slide")
 
-        else:
-            slide_path = os.path.join(current_directory, "Dataset", "COMP6741",  "Slide", "slide{}.pdf".format(slide))
-            slide_id = URIRef(slide_path)
-            roboProfKG.add((slide_id, RDF.type, CU.Slide))
-            lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], slide)]
-            roboProfKG.add((lec_id, CU.hasLectureContent, slide_id))
-
+    # add labs
+    for lab in range(1, labs):
+        lab_id = CU["{}{}_Lab#{}".format(row['Course code'], row['Course number'], lab)]
+        lab_path = os.path.join(current_directory, "Dataset", row['Course code']+row['Course number'],  "Lab", "Lab{}.pdf".format(lab))
+        roboProfKG.add((lab_id, RDF.type, CU.Lab))
+        roboProfKG.add((cn, CU.hasLab, lab_id))
+        roboProfKG.add((lab_id, CU.hasLabNumber, Literal(lab)))
+        roboProfKG.add((lab_id, RDFS.seeAlso, URIRef(lab_path)))
+    generateTopics(roboProfKG, cn, row, "Lab")
+    roboProfKG.add((cn, CU.hasCourseEvent, Literal("Lab")))
+    
+        # open the .txt file -> get all the topics linked to dbpedia -> add it to triple. Add the provenence as the worksheet
     # add topics to courses
-    if row['Course number'] == '6231':
-        for topic in TOPIC_TITLES_6231:
-            roboProfKG.add((CU[topic], RDF.type, CU.Topic))
-            roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
-            roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
-            roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
-            roboProfKG.add((cn, CU.hasTopic, CU[topic]))
-            roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.mongodb.com/docs/manual/sharding/")))
-    else:
-        for topic in TOPIC_TITLES_6741:
-            roboProfKG.add((CU[topic], RDF.type, CU.Topic))
-            roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
-            roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
-            roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
-            roboProfKG.add((cn, CU.hasTopic, CU[topic]))
-            roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.ibm.com/topics/machine-learning")))
+    # if row['Course number'] == '6231':
+    #     for topic in TOPIC_TITLES_6231:
+    #         roboProfKG.add((CU[topic], RDF.type, CU.Topic))
+    #         roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
+    #         roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
+    #         roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
+    #         roboProfKG.add((cn, CU.hasTopic, CU[topic]))
+    #         roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.mongodb.com/docs/manual/sharding/")))
+    # else:
+    #     for topic in TOPIC_TITLES_6741:
+    #         roboProfKG.add((CU[topic], RDF.type, CU.Topic))
+    #         roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
+    #         roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
+    #         roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
+    #         roboProfKG.add((cn, CU.hasTopic, CU[topic]))
+    #         roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.ibm.com/topics/machine-learning")))
 
     return roboProfKG
 
@@ -361,9 +409,6 @@ def generateTXTFromPDF():
         base_outline = os.path.join(base_dir, 'course_outline.pdf')
         txt_outline = os.path.join(txt_dir, 'course_outline.txt')
 
-        print(base_outline)
-        print(txt_outline)
-
         if os.path.isfile(base_outline) and not os.path.isfile(txt_outline) :
             file_data = parser.from_file(base_outline)
 
@@ -393,10 +438,31 @@ def generateTXTFromPDF():
                 output = file_data['content'].strip().replace('\n', '')
 
                 # convert it to utf-8
-                output = output.encode('utf-8', errors='ignore')
+                # output = output.encode('utf-8', errors='ignore')
                 # save it
                 with open(os.path.join(txt_subdir, f.split(".")[0] + ".txt"), 'w') as f:
                     f.write(str(output))
+
+def generate_dbpedia_entities(fileData):
+    '''
+    This function generates and returns the dbpedia entities linked by spotlight of a single file.
+    Warning! Requires the spacy en_core_web_lg model. If you do not have it, run
+    python -m spacy download en_core_web_lg on your venv (~750 mb)
+
+    !! We will definitely need to setup a local server of spotlight. Bad HTTP responses for many access in a row !!
+
+    :param file_txt: txt version of a file as rendered by Apache Tika.
+    :return: List of dbpedia URIs entities
+    '''
+    # ner_categories = ["PERSON", "ORG", "GPE", "PRODUCT" ]
+    doc = nlp(fileData)
+    entities = []
+    for ent in doc.ents:
+        if eval(ent._.dbpedia_raw_result['@similarityScore']) >= 0.75:# and (ent. label_ in ner_categories):
+            entities.append((ent.kb_id_, ent))
+    # print(set(entities))
+    return set(entities)
+
 
 def generate_directories():
     '''
@@ -405,9 +471,7 @@ def generate_directories():
     '''
     for course in ["COMP6231", "COMP6741"]:
         dir_name = os.path.join(BASE_DATA_DIR, f"{course}")
-        print(dir_name)
         if os.path.exists(dir_name) and not os.path.exists(dir_name + "_TXT"):
-            print("inside if")
             txt_dir = dir_name + "_TXT"
             os.mkdir(txt_dir)
         else:
@@ -424,6 +488,6 @@ def generate_directories():
 
 if __name__ == '__main__':
     roboProfKG = Graph()
+    # generate_directories()
+    # generateTXTFromPDF()
     generateKnowledgeBase(roboProfKG)
-    generate_directories()
-    generateTXTFromPDF()
