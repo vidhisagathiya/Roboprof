@@ -1,35 +1,35 @@
 @prefix cu: <http://is-concordia.io/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix foaf: <http://xmlns.com/foaf/spec/>
+@prefix foaf: <http://xmlns.com/foaf/spec/> .
 
 # Classes
 cu:University
     a               rdfs:Class ;
     rdfs:subClassOf foaf:Organization ;
-    rdfs:label      "University" .
+    rdfs:label      "University" ;
     rdfs:comment "Represents a University"@en .
 
 cu:Course
     a               rdfs:Class ;
-    rdfs:label      "Course" .
+    rdfs:label      "Course" ;
     rdfs:comment "Represents a Course"@en .
 
 cu:CourseEvent
     a               rdfs:Class ;
-    rdfs:label      "Course Event" .
+    rdfs:label      "Course Event" ;
     rdfs:comment "Represents a Course Event"@en .
 
 cu:Lecture
     a               rdfs:Class ;
-    rdfs:label      "Lecture" .
-    rdfs:subClassOf cu:CourseEvent .
+    rdfs:label      "Lecture" ;
+    rdfs:subClassOf cu:CourseEvent ;
     rdfs:comment "Represents a Lecture"@en .
 
 cu:Lab
     a               rdfs:Class ;
-    rdfs:label      "Lab" .
-    rdfs:subClassOf cu:CourseEvent .
+    rdfs:label      "Lab" ;
+    rdfs:subClassOf cu:CourseEvent ;
     rdfs:comment "Represents a Lab"@en .
 
 cu:LectureContent 
@@ -39,19 +39,19 @@ cu:LectureContent
 
 cu:Worksheet
     a               rdfs:Class ;
-    rdfs:subClassOf cu:LectureContent
-    rdfs:label      "Worksheet" .
+    rdfs:subClassOf cu:LectureContent ;
+    rdfs:label      "Worksheet" ;
     rdfs:comment "Represents a Worksheet"@en .
 
 cu:Slide
     a               rdfs:Class ;
-    rdfs:subClassOf cu:LectureContent
-    rdfs:label      "Slide" .
+    rdfs:subClassOf cu:LectureContent ;
+    rdfs:label      "Slide" ;
     rdfs:comment "Represents a Slide"@en .
 
 cu:Topic
     a               rdfs:Class ;
-    rdfs:label      "Topic" .
+    rdfs:label      "Topic" ;
     rdfs:comment "Represents a Topic"@en .
 
 cu:Student
@@ -63,7 +63,7 @@ cu:Student
 
 
 # Properties
-cu:Offers
+cu:offers
     a            rdf:Property ;
     rdfs:label   "Offers" ;
     rdfs:comment "Specifies the course offered by the University"@en ;
@@ -195,7 +195,7 @@ cu:isEnrolledIn
     rdfs:label   "isEnrolledIn" ;
     rdfs:comment "Specifies the courses of a student" ;
     rdfs:domain  cu:Student ;
-    rdfs:range   rdfs:Course .
+    rdfs:range   cu:Course .
 
 cu:hasCompetency
     a            rdf:Property ;
@@ -203,3 +203,31 @@ cu:hasCompetency
     rdfs:comment "Specifies the competencies of a student" ;
     rdfs:domain  cu:Student ;
     rdfs:range   rdfs:Topic .
+
+cu:hasLabContent
+    a            rdf:Property ;
+    rdfs:label   "hasLabContent" ;
+    rdfs:comment "Specifies the content of a lab"@en ;
+    rdfs:domain  cu:Lab ;
+    rdfs:range   rdfs:LectureContent .
+
+cu:hasWorksheetNumber
+    a            rdf:Property ;
+    rdfs:label   "hasWorksheetNumber" ;
+    rdfs:comment "Specifies the number of a worksheet"@en ;
+    rdfs:domain  cu:Worksheet ;
+    rdfs:range   rdfs:Literal .
+
+cu:hasSlideNumber
+    a            rdf:Property ;
+    rdfs:label   "hasSlideNumber" ;
+    rdfs:comment "Specifies the number of a slide"@en ;
+    rdfs:domain  cu:Slide ;
+    rdfs:range   rdfs:Literal .
+
+cu:hasCourseCode
+    a            rdf:Property ;
+    rdfs:label   "hasCourseCode" ;
+    rdfs:comment "Specifies the code of a course"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
