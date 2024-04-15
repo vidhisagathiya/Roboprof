@@ -427,62 +427,6 @@ WHERE {{
         return []
 
 
-# # Q6) What components does the course [course] have?
-# class ActionCourseComponents(Action):
-
-#     def name(self) -> Text:
-#         return "action_course_components"
-
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-#         course = tracker.slots['course']
-
-#         values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
-#         csubject = values[1].upper().replace(" ", "")
-#         cnumber = values[2]
-
-#         if csubject != "COMP" or (cnumber != "346" and cnumber != "474"):
-#             dispatcher.utter_message(text="Sorry, we currently only support finding components of COMP 474 and COMP 346.")
-#             return
-
-#         response = requests.post(SPARQL_ENDPOINT,
-#                                  data={'query': """
-#                             PREFIX vivo: <http://vivoweb.org/ontology/core#>
-#                             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#                             PREFIX DC: <http://purl.org/dc/terms/>
-#                             PREFIX acad: <http://acad.io/schema#>
-#                             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-#                             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-#                             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#                             PREFIX acaddata: <http://acad.io/data#>
-
-#                             SELECT ?cname ?component ?componentLabel
-#                             WHERE{
-#                                 ?course a vivo:Course.
-#                                 ?course foaf:name ?cname.
-#                                 ?course acad:courseNumber "%s"^^xsd:int.
-#                                 ?course acad:courseSubject "%s"^^xsd:string.
-#                                 ?course acad:courseHas ?component.
-#                                 ?component rdfs:label ?componentLabel.
-#                             }
-#                             """ % (cnumber, csubject)
-#                                        })
-
-#         y = json.loads(response.text)
-
-#         results = y["results"]
-#         bindings = results["bindings"]
-
-#         dispatcher.utter_message(text=f"{csubject} {cnumber} has:\n")
-
-#         for component in bindings:
-#             dispatcher.utter_message(text=f"\t-->{component['componentLabel']['value']}\n")
-
-#         return []
-
-
 # 7. For [course] [number], what additional resources (links to web pages) are available?
 class AdditionalResources(Action):
 
