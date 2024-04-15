@@ -100,7 +100,7 @@ slots:
     initial_value: "unknown"
     mappings:
       - type: from_entity
-        entity: subject
+        entity: student
 
 responses:
   utter_greet:
