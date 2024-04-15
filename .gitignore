@@ -1,5 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,eclipse,intellij,intellij+all,intellij+iml,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,eclipse,intellij,intellij+all,intellij+iml,macos
+## RASA ##
+.rasa/
+rasa/models
 
 ### Eclipse ###
 .metadata
