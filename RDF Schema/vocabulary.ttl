@@ -134,6 +134,20 @@ cu:hasLectureContent
     rdfs:domain  cu:Lecture ;
     rdfs:range   rdfs:LectureContent .
 
+cu:hasLab
+    a            rdf:Property ;
+    rdfs:label   "hasLab" ;
+    rdfs:comment "Specifies the Lab"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
+
+cu:hasLabNumber
+    a            rdf:Property ;
+    rdfs:label   "hasLabNumber" ;
+    rdfs:comment "Specifies the Lab Number"@en ;
+    rdfs:domain  cu:Course ;
+    rdfs:range   rdfs:Literal .
+
 cu:topicsCovered
     a            rdf:Property ;
     rdfs:label   "Topics covered in a Lecture" ;
