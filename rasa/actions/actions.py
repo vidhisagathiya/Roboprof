@@ -663,24 +663,17 @@ class ActionTopicsCovered(Action):
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX tc: <http://linkedscience.org/teach/ns#>
-            PREFIX cu: <http://is-concordia.io/> 
+            PREFIX cu: <http://is-concordia.io/>
 
             SELECT DISTINCT ?topicName ?topic ?courseEvent ?resource
             WHERE {{
-                ?course a cu:Course .
-                ?course tc:courseTitle ?title ;
-                        cu:hasCourseSubject ?courseSubject ;
-                        cu:hasCourseNumber ?courseNumber .
-                ?courseEvent ?eventPredicate ?event ;
-                            cu:partOfCourse ?course .
-                ?event cu:hasTopic ?topic ;
-                        cu:hasResource ?resource .
-                ?topic foaf:name ?topicName ;
-                       rdf:type ?topicType .
-                FILTER(?courseSubject = "{csubject}")
-                FILTER(?courseNumber = "{cnumber}")
-                FILTER(?topicType = tc:Topic)
+                ?course a cu:Course ;
+                        cu:hasCourseSubject "{csubject}" ;
+                        cu:hasCourseNumber "{cnumber}" .
+                ?course cu:hasCourseEvent ?courseEvent .
+                ?courseEvent cu:hasTopic ?topic ;
+                             cu:hasResource ?resource .
+                ?topic foaf:name ?topicName .
             }}
         """
 
@@ -694,7 +687,7 @@ class ActionTopicsCovered(Action):
         if not bindings:
             dispatcher.utter_message(
                 text=f"Sorry, no topics covered for {csubject} {cnumber}.")
-            return
+            return []
 
         dispatcher.utter_message(
             text=f"Topics covered in {csubject} {cnumber}:\n")
@@ -727,13 +720,12 @@ class ActionCoursesForTopic(Action):
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX tc: <http://linkedscience.org/teach/ns#>
             PREFIX cu: <http://is-concordia.io/>
 
             SELECT ?course ?event (COUNT(?event) AS ?eventCount)
             WHERE {{
                 ?course a cu:Course ;
-                        tc:partOfEvent ?event .
+                        cu:hasCourseEvent ?event .
                 ?event cu:hasTopic <{topic_uri}> .
             }}
             GROUP BY ?course ?event
@@ -750,7 +742,7 @@ class ActionCoursesForTopic(Action):
         if not bindings:
             dispatcher.utter_message(
                 text=f"No courses found for the given topic URI: {topic_uri}")
-            return
+            return []
 
         dispatcher.utter_message(text=f"Courses and their events where the topic {topic_uri} appears:\n")
 
@@ -779,15 +771,14 @@ class ActionCourseEventResourceForTopic(Action):
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX tc: <http://linkedscience.org/teach/ns#>
             PREFIX cu: <http://is-concordia.io/>
 
             SELECT ?course ?event ?resource
             WHERE {{
                 ?course a cu:Course ;
-                        tc:partOfEvent ?event .
-                ?event cu:hasTopic <{topic_uri}> .
-                ?event tc:hasResource ?resource .
+                        cu:hasCourseEvent ?event .
+                ?event cu:hasTopic <{topic_uri}> ;
+                       cu:hasResource ?resource .
             }}
         """
 
@@ -801,7 +792,7 @@ class ActionCourseEventResourceForTopic(Action):
         if not bindings:
             dispatcher.utter_message(
                 text=f"No course events found for the given topic URI: {topic_uri}")
-            return
+            return []
 
         dispatcher.utter_message(text=f"Course events and corresponding resources where the topic {topic_uri} is covered:\n")
 
