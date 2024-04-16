@@ -26,7 +26,15 @@ Roboprof is an intelligent agent designed to answer university course- and stude
 
 8. **kb_ntriples.rdf**: An alternate representation of the knowledge base in the N-Triples format. It provides the same information as kb.ttl but in a different serialization format.
 
-9. **Report.pdf**: The project report detailing the design, implementation, and evaluation of the knowledge base construction process.
+9. **nlu.yml**: The file containing natural language understanding (NLU) data for training the chatbot. It defines intents and examples of user messages for each intent.
+
+10. **stories.yml**: The file containing conversational stories that define different conversation paths for the chatbot. Each story represents a possible interaction between the user and the chatbot.
+
+11. **domain.yml**: The file defining the domain of the chatbot, including intents, entities, actions, responses, and other configurations.
+
+12. **actions.py**: The Python script containing custom actions for the chatbot. These actions allow the chatbot to interact with external systems, databases, or APIs to retrieve information and respond to user queries.
+
+13. **Report.pdf**: The project report detailing the design, implementation, and evaluation of the knowledge base construction process.
 
 
 ## Execution Steps
@@ -38,11 +46,13 @@ To build the knowledge base, follow these steps:
 4. Open a terminal or command prompt and Navigate to the project directory.
 5. Run `pip install -r requirements.txt` to install the required libraries.
 5. Run `python mergeCSV.py` to clean and merge the CSV files, ensuring the dataset is up to date and properly formatted.
-6. Execute `python main.py` to generate the knowledge base. This process will produce two output files: kb.ttl and kb_ntriples.rdf.
+6. Execute `python main.py` to generate the knowledge base. This process will produce text files from PDF files while preserving directory structure for 2 courses and two output files: kb.ttl and kb_ntriples.rdf.
 7. Download the Apache Jena Fuseki binary distribution from [here](https://jena.apache.org/download/index.cgi).
 8. Unpack the archive and make the server script executable by running `chmod u+x fuseki-server` in the terminal.
-9. Access Fuseki's web interface by navigating to http://localhost:3030/ in your browser.
-10. Create a new dataset, upload kb.ttl to populate it with data, and proceed to the query tab to start querying data.
+9. Access Fuseki's web interface by navigating to http://localhost:3030/ in your browser. Create a new dataset, upload kb.ttl to populate it with data, and proceed to the query tab to start querying data.
+10. Download and install Rasa Open Source framework, Navigate to the project directory in a terminal.
+11. Activate the virtual environment if used. Run `rasa shell` command to start the chatbot.
+12. Interact with the chatbot by typing messages,To exit, type /stop or press Ctrl+C.
 
 ## Contributors
 
