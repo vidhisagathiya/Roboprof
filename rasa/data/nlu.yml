@@ -94,37 +94,41 @@ nlu:
   examples: |
     - ^[a-zA-Z]{4}\s\d{3,4}$
 
+# - regex: studentId
+#   examples: |
+#     - ^\d{8}$
+
+# no
 - intent: about_course
   examples: |
-    - What is course [COMP 474](course) about?
-    - What is course [COMP 6231](course) about?
-    - What is course [COMP 6741](course) about?
-    - What is course [BIOL 201](course) about?
-    - What is course [JOUR 535](course) about?
-    - What is course [COMS 684](course) about?
-    - What is course [DRAW 200](course) about?
-    - What is course [PERC 209](course) about?
-    - What is course [ECON 423](course) about?
-    - What is course [FRAA 409](course) about?
-    - What is course [GEOG 301](course) about?
-    - What is course [HIST 380](course) about?
-    - What is course [BLDG 492](course) about?
-    - What is course [LOYC 420](course) about?
-    - What is course [MAST 232](course) about?
-    - What is course [PHYS 224](course) about?
-    - What is course [RELI 410](course) about?
-    - What is course [SCPA 301](course) about?
-    - What is course [THEO 234](course) about?
-    - What is course [URBS 491](course) about?
-    - What is course [WSDB 292](course) about?
-    - What is course [COMP 474](course) about?
-    - What is course [ENCS 474](course) about?
-    - What is course [FINA 471](course) about?
-    - What is course [MAST 333](course) about?
+    - What is [COMP 474](course) about?
+    - What is [COMP 6231](course) about?
+    - What is [COMP 6741](course) about?
+    - What is [BIOL 201](course) about?
+    - What is [JOUR 535](course) about?
+    - What is [COMS 684](course) about?
+    - What is [DRAW 200](course) about?
+    - What is [PERC 209](course) about?
+    - What is [ECON 423](course) about?
+    - What is [FRAA 409](course) about?
+    - What is [GEOG 301](course) about?
+    - What is [HIST 380](course) about?
+    - What is [BLDG 492](course) about?
+    - What is [LOYC 420](course) about?
+    - What is [MAST 232](course) about?
+    - What is [PHYS 224](course) about?
+    - What is [RELI 410](course) about?
+    - What is [SCPA 301](course) about?
+    - What is [THEO 234](course) about?
+    - What is [URBS 491](course) about?
+    - What is [WSDB 292](course) about?
+    - What is [ENCS 474](course) about?
+    - What is [FINA 471](course) about?
+    - What is [MAST 333](course) about?
     - What is [MECH 361](course) about ?
-    - What's [ENGR 208](course) about
-    - What's [INST 232](course) about
-    - What's [COMP 248](course) course about
+    - What's [ENGR 208](course) about?
+    - What's [INST 232](course) about?
+    - What's [COMP 248](course) course about?
 
 
 - intent: about_courses_offered_by_university
@@ -132,6 +136,7 @@ nlu:
     - What courses are offered by [Concordia University](university)?
     - What courses are offered by [Con University](university)?
     - What courses are offered by [CU](university)?
+    - What courses are offered by [Concordia](university)?
     - What courses are offered by [Con U](university)?
 
 
@@ -187,16 +192,16 @@ nlu:
 
 - intent: about_courses_within_subject
   examples: |
-    - List all courses offered by [Concordia University](university] within [COMP](subject)
-    - List all courses offered by [Concordia University](university] within [SOEN](subject)
+    - List all courses offered by [Concordia University](university) within [COMP](subject)
+    - List all courses offered by [Concordia University](university) within [SOEN](subject)
     - List all courses offered within [COMP](subject)
     - List all courses offered within [SOEN](subject)
-    - List all courses offered by [Concordia](university] within [COMP](subject)
-    - List all courses offered by [Concordia](university] within [SOEN](subject)
-    - List all courses offered by [CU](university] within [COMP](subject)
-    - List all courses offered by [CU](university] within [SOEN](subject)
-    - List all courses offered by [ConU](university] within [COMP](subject)
-    - List all courses offered by [ConU](university] within [SOEN](subject)
+    - List all courses offered by [Concordia](university) within [COMP](subject)
+    - List all courses offered by [Concordia](university) within [SOEN](subject)
+    - List all courses offered by [CU](university) within [COMP](subject)
+    - List all courses offered by [CU](university) within [SOEN](subject)
+    - List all courses offered by [ConU](university) within [COMP](subject)
+    - List all courses offered by [ConU](university) within [SOEN](subject)
 
 - intent: about_credits
   examples: |
@@ -216,13 +221,15 @@ nlu:
     - What materials are recommended for [convolution](topic) in [COMP 6741](course)?
     - What materials are recommended for [convolution](topic) in [COMP 371](course)?
     - What materials are recommended for [convolution](topic) in [SOEN 491](course)?
+    - What materials are recommended for [Applied Artificial Intelligence](topic) in [SOEN 491](course)?
+    - What materials are recommended for [RDF](topic) in [COMP 6741](course)?
 
 - intent: about_additional_resources
   examples: |
     - For [EDUC 301](course), what additional resources (links to web pages) are available?
     - For [EDUC 301](course), what additional resources are available?
-    - What additional resources (links to web pages) are available for [EDUC 301](course)?
-    - What additional resources are available for [EDUC 301](course)?
+    - What additional resources (links to web pages) are available for [COMP 301](course)?
+    - What additional resources are available for [COMP 6231](course)?
 
 
 - intent: about_detail_content
@@ -251,7 +258,7 @@ nlu:
     - What materials are recommended for reading [convolution](topic) in [COMP 6231](course)?
     - What materials are recommended for reading [Applied Artificial Intelligence](topic) in [COMP 6741](course)?
     - What materials are recommended for studying [convolution](topic) in [COMP 6741](course)?
-    - What materials are recommended for studying [convolution](topic) in [COMP 6231](course)?
+    - What materials are recommended for studying [RDF](topic) in [COMP 6231](course)?
     - What materials are recommended for studying [Applied Artificial Intelligence](topic) in [COMP 6741](course)?
 
 
@@ -264,8 +271,13 @@ nlu:
 
 - intent: about_student_transcript
   examples: |
-    - Print a transcript for 40229633, listing all the courses taken with their grades
-    - Print a transcript for 40229633
+    - Print a transcript for [40229633](studentId), listing all the courses taken with their grades
+    - Print a transcript for [40229633](studentId)
+    - Print a transcript for [12345678](studentId)
+    - Print a transcript for [67297465](studentId), listing all the courses taken with their grades
+    - Give a transcript for [40229633](studentId), listing all the courses taken with their grades
+    - Give a transcript for [40233875](studentId)
+    - Give a transcript for [12345678](studentId), listing all the courses taken with their grades
 
 - intent: about_student_courses_completed
   examples: |
@@ -283,13 +295,19 @@ nlu:
 
 - intent: about_student_grades
   examples: |
-    - What grades did 40229633 achieve in [COMP 6741](course)?
-    - What grades did 40229633 achieve in [COMP 6231](course)?
+    - What grades did [40229633](studentId) achieve in [COMP 6741](course)?
+    - What grades did [40233875](studentId) achieve in [SOEN 6441](course)?
+    - What grades did [12345678](studentId) achieve in [COMP 6231](course)?
+    - What grades did [87695347](studentId) achieve in [SOEN 6441](course)?
+    - What grades did [87695347](studentId) achieve in [SOEN 391](course)?
+    - What grades did [12345678](studentId) achieve in [COMP 471](course)?
 
 - intent: about_topics_covered
   examples: |
     - Which topics are covered in [lec 5](courseEvent) of [COMP 6741](course)?
     - Which topics are covered in [lab 2](courseEvent) of [COMP 6741](course)?
     - Which topics are covered in [lec #12](courseEvent) of [COMP 6741](course)?
+    - Which topics are covered in [lecture #12](courseEvent) of [COMP 6741](course)?
     - Which topics are covered in [lecture 2](courseEvent) of [COMP 6741](course)?
     - Which topics are covered in [laboratory 3](courseEvent) of [COMP 6741](course)?
+    - Which topics are covered in [lab 3](courseEvent) of [COMP 6741](course)?

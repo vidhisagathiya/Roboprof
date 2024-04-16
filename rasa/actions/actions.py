@@ -53,7 +53,7 @@ SPARQL_ENDPOINT = "http://localhost:3030/testData"
 class TopicsCourseLecture(Action):
 
     def name(self) -> Text:
-        return "action_courses_offered_by_university"
+        return "action_about_courses_offered_by_university"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -104,7 +104,7 @@ WHERE {{
 class WhichCourseHasTopic(Action):
 
     def name(self) -> Text:
-        return "action_course_uni_topic"
+        return "action_about_course_uni_topic"
 
     def response_request(self, topicName):
         query = f"""
@@ -151,7 +151,7 @@ WHERE {{
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        topic = tracker.slots['topic'].replace(" ", "")
+        topic = tracker.slots['topic']
 
         courses = self.response_request(topic)
 
@@ -172,7 +172,7 @@ WHERE {{
 class WhichTopicInCourseDuringLecture(Action):
 
     def name(self) -> Text:
-        return "action_course_lecture_topics"
+        return "action_about_course_lecture_topics"
 
     def response_request(self, courseSubject, courseNumber, lectureNumber):
         query = f"""
@@ -255,7 +255,7 @@ WHERE {{
 class WhichCourseWithinSubject(Action):
 
     def name(self) -> Text:
-        return "action_courses_within_subject"
+        return "action_about_courses_within_subject"
 
     def response_request(self, csubject):
         query = f"""
@@ -296,7 +296,7 @@ WHERE {{
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        print(tracker.slots)
         subject = tracker.slots['subject']
 
         courses = self.response_request(subject)
@@ -721,7 +721,7 @@ SELECT ?studentName ?gradeValue
         csubject = values[1].upper().strip()
         cnumber = values[2].strip()
 
-        student = tracker.slots['student'].strip()
+        student = tracker.slots['studentId']
 
         grades = self.response_request(csubject, cnumber, student)
         if not grades:
@@ -829,20 +829,17 @@ SELECT ?name ?id ?courseTitle ?grade
         bindings = results["bindings"]
 
         for grade in bindings:
-            studentName = grade['studentName']['value']
             studentId = grade['id']['value']
             courseTitle = grade['courseTitle']['value']
-            grade = grade['gradeValue']['value']
-            grades.append({'studentId': studentId, 'studentName': studentName,"courseTitle":courseTitle, "gradeValue": grade})
+            grade = grade['grade']['value']
+            grades.append({'studentId': studentId,"courseTitle":courseTitle, "gradeValue": grade})
 
         return grades
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        print(tracker.slots)
-        student = tracker.slots['student']
-
+        student = tracker.slots['studentId']
         grades = self.response_request(student)
         if not grades:
             dispatcher.utter_message(
@@ -850,68 +847,118 @@ SELECT ?name ?id ?courseTitle ?grade
         else:
             answer = f"The transcript for the student with ID {student} \n"
             for grade in grades:
-                answer = answer + grade['id'] + "\t" + grade['studentName'] + "\t" + grade['courseTitle'] + "\t" + grade['gradeValue'] + "\n"
+                answer = answer + grade['studentId'] + "\t" + grade['courseTitle'] + "\t" + grade['gradeValue'] + "\n"
             dispatcher.utter_message(text=f"{answer}")
         return []
 
 # Need this
-    
+#Which topics are covered in <course event>?”
 # A2-Q1. For a course c, list all covered topics t, printing out their English labels and their DBpedia/Wikidata URI, 
 # together with the course event URI (e.g., ’lab3’) and resource URI (e.g., ’slides10’) where they appeared. Filter out duplicates.
 class ActionTopicsCovered(Action):
 
     def name(self) -> Text:
-        return "action_topics_covered"
+        return "action_about_topics_covered"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        course = tracker.slots['course']
-        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
-        csubject = values[1].upper().strip()
-        cnumber = values[2].strip()
+    def response_request(self, courseSubject, courseNumber, eventNumber, event):
+        
+        if event.lower() == "lab" or event.lower() == "laboratory":
+            query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
 
-        query = f"""
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX cu: <http://is-concordia.io/>
+SELECT ?topicName ?topics
+WHERE {{
+  	cu:Concordia_University cu:Offers ?course .
+  	?course tc:courseTitle ?title ;
+  		cu:hasLecture ?lecture ;
+    cu:hasCourseSubject ?courseSubject ;
+    cu:hasCourseNumber ?courseNumber .
+  ?lecture cu:topicsCovered ?topics ;
+           cu:hasLectureNumber ?lectureNumber .
+  ?topics foaf:name ?topicName .
+  FILTER(?courseSubject = "{courseSubject}")
+  FILTER(?lectureNumber = {eventNumber})
+  FILTER(?courseNumber = "{courseNumber}")
+}}
+        """
+        else:
+            query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX tc: <http://linkedscience.org/teach/ns#>
+PREFIX cu: <http://is-concordia.io/> 
 
-            SELECT DISTINCT ?topicName ?topic ?courseEvent ?resource
-            WHERE {{
-                ?course a cu:Course ;
-                        cu:hasCourseSubject "{csubject}" ;
-                        cu:hasCourseNumber "{cnumber}" .
-                ?course cu:hasCourseEvent ?courseEvent .
-                ?courseEvent cu:hasTopic ?topic ;
-                             cu:hasResource ?resource .
-                ?topic foaf:name ?topicName .
-            }}
+SELECT ?topicName ?topics
+WHERE {{
+  	cu:Concordia_University cu:Offers ?course .
+  	?course tc:courseTitle ?title ;
+  		cu:hasLab ?lab ;
+    cu:hasCourseSubject ?courseSubject ;
+    cu:hasCourseNumber ?courseNumber .
+  ?lab cu:topicsCovered ?topics ;
+           cu:hasLabNumber ?labNumber .
+  ?topics foaf:name ?topicName .
+  FILTER(?courseSubject = "{courseSubject}")
+  FILTER(?labNumber = {eventNumber})
+  FILTER(?courseNumber = "{courseNumber}")
+}}
         """
 
         response = requests.post(SPARQL_ENDPOINT,
                                  data={'query': query})
+        # Use the json module to load CKAN's response into a dictionary.
 
         y = json.loads(response.text)
 
+        # the result is a Python dictionary:
         results = y["results"]
-        bindings = results["bindings"]
-        if not bindings:
+
+        topics = []
+
+        for result in results["bindings"]:
+            topicName = result["topicName"]
+            topic = result["topics"]
+
+            topicNameValue = topicName["value"]
+            topicValue = topic["value"]
+
+            row = {"topicName": topicNameValue, "topic": topicValue}
+            topics.append(row)
+
+        return topics
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print(tracker.slots)
+        course = tracker.slots['course'].replace(" ", "")
+
+        values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
+
+        csubject = values[1].upper()
+        cnumber = values[2]
+
+        event = tracker.slots['courseEvent'].strip()
+        eventValues = re.split(
+            r'([^\d]*)(\d.*)', event, maxsplit=1)
+        eventNumber = eventValues[2]
+        event = eventValues[1]
+        topics = self.response_request(csubject, cnumber, eventNumber, event)
+
+        if not topics:
             dispatcher.utter_message(
-                text=f"Sorry, no topics covered for {csubject} {cnumber}.")
-            return []
-
-        dispatcher.utter_message(
-            text=f"Topics covered in {csubject} {cnumber}:\n")
-
-        for result in bindings:
-            topic_name = result.get("topicName", {}).get("value", "")
-            topic_uri = result.get("topic", {}).get("value", "")
-            course_event_uri = result.get("courseEvent", {}).get("value", "")
-            resource_uri = result.get("resource", {}).get("value", "")
-
-            dispatcher.utter_message(
-                text=f"Topic: {topic_name}\nTopic URI: {topic_uri}\nCourse Event URI: {course_event_uri}\nResource URI: {resource_uri}\n")
+                text=f"No topics covered in {eventNumber} or {eventNumber} did not happen.")
+        else:
+            answer = f"The following topics were covered in the lecture {eventNumber} of the course {csubject}{cnumber}:\n"
+            for topic in topics:
+                answer = answer + topic['topicName'] + \
+                    ": " + topic['topic'] + "\n"
+            dispatcher.utter_message(text=f"{answer}")
 
         return []
 
@@ -970,27 +1017,25 @@ class ActionCoursesForTopic(Action):
 
 # Need this
 # A2-Q2 What is course [course] about?
-
-
 class CourseDescription(Action):
 
     def name(self) -> Text:
-        return "action_course_event_resource_for_topic"
+        return "action_about_course"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        topic_uri = tracker.slots['topic_uri']
-
+        course = tracker.slots['course']
+        print(course)
         values = re.split(r'([^\d]*)(\d.*)', course, maxsplit=1)
 
         csubject = values[1].upper()
         cnumber = values[2]
-
-        data = {'query': f"""
+        print(csubject)
+        query = f"""
 PREFIX cu: <http://is-concordia.io/>
 PREFIX teach: <http://linkedscience.org/teach/ns#>
-SELECT ?courseName ?courseDescription
+SELECT ?courseDescription
 WHERE {{
    cu:Concordia_University cu:Offers ?course .
 	?course teach:courseDescription ?courseDescription ;
@@ -1000,27 +1045,20 @@ WHERE {{
   filter(?courseSubject = "{csubject}")
     filter(?courseNumber = "{cnumber}")
 }}
-"""}
+"""
+        data = {'query': query}
         response = requests.post(SPARQL_ENDPOINT,
-                                 data={'query': query})
+                                 data=data)
 
         y = json.loads(response.text)
-
+        print(y)
         results = y["results"]
-
+        print(results)
         if not results or not results["bindings"]:
             dispatcher.utter_message(
-                text=f"No course events found for the given topic URI: {topic_uri}")
+                text=f"{course} not found!")
             return []
 
-        dispatcher.utter_message(text=f"Course events and corresponding resources where the topic {topic_uri} is covered:\n")
-
-        for result in bindings:
-            course_uri = result.get("course", {}).get("value", "")
-            event_uri = result.get("event", {}).get("value", "")
-            resource_uri = result.get("resource", {}).get("value", "")
-
-            dispatcher.utter_message(
-                text=f"Course URI: {course_uri}\nEvent URI: {event_uri}\nResource URI: {resource_uri}\n")
-
+        dispatcher.utter_message(text=f"The {course} has the following overview in my database: \n")
+        dispatcher.utter_message(text=f"{results['binding']['courseDescription']}")
         return []

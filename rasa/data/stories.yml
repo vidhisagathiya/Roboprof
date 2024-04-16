@@ -32,7 +32,7 @@ stories:
 - story: get course info
   steps:
     - intent: about_course
-    - action: action_course_info
+    - action: action_about_course
 
 - story: get students who completed courses
   steps:
@@ -62,33 +62,33 @@ stories:
 - story: get topics covered
   steps:
     - intent: about_topics_covered
-    - action: action_topics_covered
+    - action: action_about_topics_covered
 
 - story: get topics offered by university
   steps:
     - intent: about_courses_offered_by_university
-    - action: action_courses_offered_by_university
+    - action: action_about_courses_offered_by_university
 
 - story: get course lecture topics
   steps:
     - intent: greet
     - action: utter_greet
     - intent: about_course_lecture_topics
-    - action: action_course_lecture_topics
+    - action: action_about_course_lecture_topics
 
 - story: get courses at uni that teach topic
   steps:
     - intent: greet
     - action: utter_greet
     - intent: about_course_uni_topic
-    - action: action_course_uni_topic
+    - action: action_about_course_uni_topic
 
 - story: get courses within a subject
   steps:
     - intent: greet
     - action: utter_greet
     - intent: about_courses_within_subject
-    - action: action_courses_within_subject
+    - action: action_about_courses_within_subject
 
 - story: get materials for course
   steps:

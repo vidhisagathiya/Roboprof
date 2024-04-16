@@ -215,17 +215,9 @@ def generateTopics(roboProfKG, cn, row, resource):
     if os.path.isdir(dir_path):
         for idf, file in enumerate(sorted(os.listdir(dir_path))):
             id = CU["{}{}_{}#{}".format(row['Course code'], row['Course number'], resource, idf+1)]
-            print(id)
             filePath = os.path.join(dir_path, file)
             filePathTxt = os.path.join(dir_path_txt, file.split('.')[0] + ".txt")
-            # print(filePathTxt)
-    #            if sub_dir in ['Lab', 'Worksheet']:
-    #                course_event_id = CU["{}{}{}{}".format(row['Course code'], row['Course number'], sub_dir, idf + 1)]
-    #            else:
-    #                course_event_id = CU["{}{}Lec{}".format(row['Course code'], row['Course number'], idf + 1)]
-    #            roboProfKG.add((f_uri, RDF.type, CU[sub_dir]))
-    #            roboProfKG.add((course_event_id, CU.HasMaterial, f_uri))
-    #            # Extract entities of file with spotlight
+           # Extract entities of file with spotlight
             with open(filePathTxt, 'r') as f:
                 data = f.read()
                 result = generate_dbpedia_entities(data)
@@ -273,8 +265,6 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
 
     roboProfKG.add((cn, CU.hasCourseOutline, URIRef(outline_path)))
     # Add Lectures
-    # topic_index = 0
-    # num_topics_per_lecture = len(TOPIC_TITLES_6231) // lecture_number
     for i in range(1, lecture_number):
         lec_id = CU["{}{}_Lecture#{}".format(row['Course code'], row['Course number'], i)]
         # add lecture for course
@@ -284,28 +274,16 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
         roboProfKG.add((cn, CU.hasLecture, lec_id))
         # Add topics, Lecture Name, description
         if row['Course number'] == '6231':
-            # add Lecture Name/Title
-            # roboProfKG.add((lec_id, FOAF.name, Literal(LEC_TITLES_6231[i - 1])))
             # add course description
             roboProfKG.add((cn, TEACH.courseDescription, Literal(COMP6231_DESC)))
-            # for topic in TOPIC_TITLES_6231[topic_index:topic_index+num_topics_per_lecture]:
-            #     roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
         else:
-            # add Lecture Name/Title
-            # roboProfKG.add(
-            #     (lec_id, FOAF.name, Literal(LEC_TITLES_6741[i - 1])))
-            # add course description
+            
             roboProfKG.add((cn, TEACH.courseDescription,
                            Literal(COMP6741_DESC)))
-            # for topic in TOPIC_TITLES_6741[topic_index:topic_index+num_topics_per_lecture]:
-            #     roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
-        # topic_index += num_topics_per_lecture
+            
     generateTopics(roboProfKG, cn, row, "Lecture")
     roboProfKG.add((cn, CU.hasCourseEvent, Literal("Lecture")))
-    # if row['Course number'] == '6231':
-    #     if topic_index < len(TOPIC_TITLES_6231):
-    #             for topic in TOPIC_TITLES_6231[topic_index:]:
-    #                 roboProfKG.add((lec_id, CU.topicsCovered, CU[topic]))
+    
     # Add worksheets
     for worksheet in range(1, worksheets):
         worksheet_id = CU["{}{}_Worksheet#{}".format(row['Course code'], row['Course number'], worksheet)]
@@ -337,24 +315,6 @@ def addCoreCoursesKnowledge(roboProfKG, row, cn):
     generateTopics(roboProfKG, cn, row, "Lab")
     roboProfKG.add((cn, CU.hasCourseEvent, Literal("Lab")))
     
-        # open the .txt file -> get all the topics linked to dbpedia -> add it to triple. Add the provenence as the worksheet
-    # add topics to courses
-    # if row['Course number'] == '6231':
-    #     for topic in TOPIC_TITLES_6231:
-    #         roboProfKG.add((CU[topic], RDF.type, CU.Topic))
-    #         roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
-    #         roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
-    #         roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
-    #         roboProfKG.add((cn, CU.hasTopic, CU[topic]))
-    #         roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.mongodb.com/docs/manual/sharding/")))
-    # else:
-    #     for topic in TOPIC_TITLES_6741:
-    #         roboProfKG.add((CU[topic], RDF.type, CU.Topic))
-    #         roboProfKG.add((CU[topic], FOAF.name, Literal(topic)))
-    #         roboProfKG.add((CU[topic], RDFS.seeAlso, DBR[topic]))
-    #         roboProfKG.add((CU[topic], RDFS.label, Literal(" ".join(topic.split("_")))))
-    #         roboProfKG.add((cn, CU.hasTopic, CU[topic]))
-    #         roboProfKG.add((CU[topic], CU.hasMaterials, Literal("https://www.ibm.com/topics/machine-learning")))
 
     return roboProfKG
 
@@ -457,13 +417,11 @@ def generate_dbpedia_entities(fileData):
     :param file_txt: txt version of a file as rendered by Apache Tika.
     :return: List of dbpedia URIs entities
     '''
-    # ner_categories = ["PERSON", "ORG", "GPE", "PRODUCT" ]
     doc = nlp(fileData)
     entities = []
     for ent in doc.ents:
-        if eval(ent._.dbpedia_raw_result['@similarityScore']) >= 0.75:# and (ent. label_ in ner_categories):
+        if eval(ent._.dbpedia_raw_result['@similarityScore']) >= 0.75:
             entities.append((ent.kb_id_, ent))
-    # print(set(entities))
     return set(entities)
 
 
@@ -491,6 +449,6 @@ def generate_directories():
 
 if __name__ == '__main__':
     roboProfKG = Graph()
-    # generate_directories()
-    # generateTXTFromPDF()
+    generate_directories()
+    generateTXTFromPDF()
     generateKnowledgeBase(roboProfKG)

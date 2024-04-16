@@ -33,24 +33,24 @@ entities:
   - department
   - courseEvent
   - subject
-  - student
+  - studentId
 
 actions:
-  - action_course_info
   - action_about_reading_material
   - action_about_competencies_of_student
-  - action_courses_within_subject
+  - action_about_courses_within_subject
   - action_about_student_grades
   - action_about_student_courses_completed
-  - action_topics_covered
-  - action_course_lecture_topics
-  - action_course_uni_topic
   - action_about_detail_content
   - action_about_additional_resources
-  - action_courses_offered_by_university
   - action_about_credits
   - action_about_materials
   - action_about_student_transcript
+  - action_about_topics_covered
+  - action_about_course_lecture_topics
+  - action_about_course_uni_topic
+  - action_about_courses_offered_by_university
+  - action_about_course
 
 slots:
   course:
@@ -73,7 +73,7 @@ slots:
         entity: university
   courseEvent:
     type: text
-    initial_value: "unkown"
+    initial_value: "unknown"
     mappings:
       - type: from_entity
         entity: courseEvent
@@ -95,12 +95,12 @@ slots:
     mappings:
       - type: from_entity
         entity: subject
-  student:
+  studentId:
     type: any
     initial_value: "unknown"
     mappings:
       - type: from_entity
-        entity: student
+        entity: studentId
 
 responses:
   utter_greet:
